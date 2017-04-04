@@ -1,6 +1,6 @@
 {
   "name": "d3-contour",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Compute contour lines using marching squares.",
   "keywords": [
     "d3",
