@@ -65,7 +65,7 @@ export default function() {
         if (i < layers.length - 1) layers[i + 1].forEach(hole);
         function hole(ring0) {
           var c = polygon.length && contains(ring1, ring0);
-          if (c === 0) polygon.length = 0;
+          if (c === 0) polygon.length = 0; // TODO This is broken.
           else if (c > 0) polygon.push(ring0.slice().reverse());
         }
         if (polygon.length) polygons.push(polygon);
