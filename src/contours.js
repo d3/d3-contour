@@ -1,6 +1,7 @@
 import {extent, thresholdSturges, ticks} from "d3-array";
 import {slice} from "./array";
 import constant from "./constant";
+import contains from "./contains";
 
 var cases = [
   [],
@@ -31,7 +32,7 @@ export default function() {
       threshold = thresholdSturges;
 
   function contours(values) {
-    var rings = [], tz = threshold(values);
+    var tz = threshold(values);
 
     // Convert number of thresholds into uniform thresholds.
     if (!Array.isArray(tz)) {
@@ -39,21 +40,41 @@ export default function() {
       tz = ticks(domain[0], domain[1], tz);
     }
 
-    // Accumulate and smooth contour polygons. TODO Assign holes.
-    tz.forEach(function(value) {
-      isoline(function(x, y) {
+    // Accumulate and smooth contour rings.
+    var layers = tz.map(function(value) {
+      return isoline(function(x, y) {
         return x >= x0
             && y >= y0
             && x < x1
             && y < y1
-            && values[(y - y0) * dx + (x - x0)] < value;
-      }).forEach(function(ring) {
+            && values[(y - y0) * dx + (x - x0)] < value; // TODO Inline this function.
+      }).map(function(ring) {
         smooth(ring, values, value);
-        rings.push(ring);
+        ring.push(ring[0]);
+        return ring;
       });
     });
 
-    return rings;
+    // Assign holes to polygons.
+    return layers.map(function(rings, i) {
+      var polygons = []
+      rings.forEach(function(ring1) {
+        var polygon = [ring1];
+        if (i > 0) layers[i - 1].forEach(hole);
+        if (i < layers.length - 1) layers[i + 1].forEach(hole);
+        function hole(ring0) {
+          var c = polygon.length && contains(ring1, ring0);
+          if (c === 0) polygon.length = 0;
+          else if (c > 0) polygon.push(ring0.slice().reverse());
+        }
+        if (polygon.length) polygons.push(polygon);
+      });
+      return {
+        type: "MultiPolygon",
+        value: tz[i],
+        coordinates: polygons
+      };
+    });
   }
 
   // Based on https://github.com/topojson/topojson-client/blob/v3.0.0/src/stitch.js
@@ -75,64 +96,73 @@ export default function() {
             if (g = fragmentByStart[endIndex]) {
               delete fragmentByEnd[f.end];
               delete fragmentByStart[g.start];
-              f = {start: f.start, end: g.end, ring: f.ring.concat(g.ring)};
+              // if (f.ring.length + g.ring.length > 70) debugger;
+              // if (f === g) throw new Error;
+              if (f !== g) f = {start: f.start, end: g.end, ring: f.ring.concat(g.ring)};
               fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
             } else if (g = fragmentByEnd[endIndex]) {
               delete fragmentByStart[f.start];
               delete fragmentByEnd[f.end];
               delete fragmentByEnd[g.end];
+              // if (f.ring.length + g.ring.length > 70) debugger;
+              if (f === g) throw new Error;
               f = {start: g.start, end: f.start, ring: g.ring.concat(f.ring.reverse())};
               fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
             } else {
               delete fragmentByEnd[f.end];
               f.ring.push(end);
-              f.end = index(end);
+              f.end = endIndex;
               fragmentByEnd[f.end] = f;
             }
           } else if (f = fragmentByStart[endIndex]) {
             if (g = fragmentByEnd[startIndex]) {
               delete fragmentByStart[f.start];
               delete fragmentByEnd[g.end];
-              f = {start: g.start, end: f.end, ring: g.ring.concat(f.ring)};
+              // if (f.ring.length + g.ring.length > 70) debugger;
+              if (f !== g) f = {start: g.start, end: f.end, ring: g.ring.concat(f.ring)};
               fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
             } else if (g = fragmentByStart[startIndex]) {
               delete fragmentByStart[f.start];
               delete fragmentByEnd[f.end];
               delete fragmentByStart[g.start];
+              // if (f.ring.length + g.ring.length > 70) debugger;
+              if (f === g) throw new Error;
               f = {start: f.end, end: g.end, ring: f.ring.reverse().concat(g.ring)};
               fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
             } else {
               delete fragmentByStart[f.start];
               f.ring.unshift(start);
-              f.start = index(start);
+              f.start = startIndex;
               fragmentByStart[f.start] = f;
             }
           } else if (f = fragmentByStart[startIndex]) {
             if (g = fragmentByEnd[endIndex]) {
               delete fragmentByStart[f.start];
               delete fragmentByEnd[g.end];
-              f = {start: g.start, end: f.end, ring: g.ring.concat(f.ring)};
+              // if (f.ring.length + g.ring.length > 70) debugger;
+              if (f !== g) f = {start: g.start, end: f.end, ring: g.ring.concat(f.ring)};
               fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
             } else { // Note: fragmentByStart[endIndex] is null!
               delete fragmentByStart[f.start];
               f.ring.unshift(end);
-              f.start = index(end);
+              f.start = endIndex;
               fragmentByStart[f.start] = f;
             }
           } else if (f = fragmentByEnd[endIndex]) {
             if (g = fragmentByStart[startIndex]) {
               delete fragmentByEnd[f.end];
               delete fragmentByStart[g.start];
-              f = {start: f.start, end: g.end, ring: f.ring.concat(g.ring)};
+              // if (f.ring.length + g.ring.length > 70) debugger;
+              if (f !== g) f = {start: f.start, end: g.end, ring: f.ring.concat(g.ring)};
               fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
             } else { // Note: fragmentByEnd[startIndex] is null!
               delete fragmentByEnd[f.end];
               f.ring.push(start);
-              f.end = index(start);
+              f.end = startIndex;
               fragmentByEnd[f.end] = f;
             }
           } else {
-            f = {start: index(start), end: index(end), ring: [start, end]};
+            f = {start: startIndex, end: endIndex, ring: [start, end]};
             fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
           }
         });
