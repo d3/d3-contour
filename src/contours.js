@@ -85,16 +85,13 @@ export default function() {
 
           if (f = fragmentByEnd[start]) {
             if (g = fragmentByStart[end]) {
-              delete fragmentByStart[f.start];
               delete fragmentByEnd[f.end];
               delete fragmentByStart[g.start];
-              delete fragmentByEnd[g.end];
               fg = f.concat(g);
               fragmentByStart[fg.start = f.start] = fragmentByEnd[fg.end = g.end] = fg;
             } else if (g = fragmentByEnd[end]) {
               delete fragmentByStart[f.start];
               delete fragmentByEnd[f.end];
-              delete fragmentByStart[g.start];
               delete fragmentByEnd[g.end];
               fg = g.concat(f.reverse());
               fragmentByStart[fg.start = g.start] = fragmentByEnd[fg.end = f.start] = fg;
@@ -107,8 +104,6 @@ export default function() {
           } else if (f = fragmentByStart[end]) {
             if (g = fragmentByEnd[start]) {
               delete fragmentByStart[f.start];
-              delete fragmentByEnd[f.end];
-              delete fragmentByStart[g.start];
               delete fragmentByEnd[g.end];
               fg = g.concat(f);
               fragmentByStart[fg.start = g.start] = fragmentByEnd[fg.end = f.end] = fg;
@@ -116,7 +111,6 @@ export default function() {
               delete fragmentByStart[f.start];
               delete fragmentByEnd[f.end];
               delete fragmentByStart[g.start];
-              delete fragmentByEnd[g.end];
               fg = f.reverse().concat(g);
               fragmentByStart[fg.start = f.end] = fragmentByEnd[fg.end = g.end] = fg;
             } else {
@@ -128,8 +122,6 @@ export default function() {
           } else if (f = fragmentByStart[start]) {
             if (g = fragmentByEnd[end]) {
               delete fragmentByStart[f.start];
-              delete fragmentByEnd[f.end];
-              delete fragmentByStart[g.start];
               delete fragmentByEnd[g.end];
               fg = g.concat(f);
               fragmentByStart[fg.start = g.start] = fragmentByEnd[fg.end = f.end] = fg;
@@ -141,10 +133,8 @@ export default function() {
             }
           } else if (f = fragmentByEnd[end]) {
             if (g = fragmentByStart[start]) {
-              delete fragmentByStart[f.start];
               delete fragmentByEnd[f.end];
               delete fragmentByStart[g.start];
-              delete fragmentByEnd[g.end];
               fg = f.concat(g);
               fragmentByStart[fg.start = f.start] = fragmentByEnd[fg.end = g.end] = fg;
             } else { // Note: fragmentByEnd[start] is null!
