@@ -56,6 +56,7 @@ export default function() {
     });
 
     // Assign holes to polygons.
+    // Based on https://github.com/mbostock/shapefile/blob/v0.6.2/shp/polygon.js
     return layers.map(function(rings, i) {
       var polygons = []
       rings.forEach(function(ring1) {
@@ -77,6 +78,7 @@ export default function() {
     });
   }
 
+  // Marching squares with isolines stitched into rings.
   // Based on https://github.com/topojson/topojson-client/blob/v3.0.0/src/stitch.js
   function isoline(test) {
     var rings = [],
@@ -171,6 +173,7 @@ export default function() {
     return ((point[0] - x0) << 1) + ((point[1] - y0) << 1) * (dx << 1);
   }
 
+  // Linear interpolation of contour points.
   function smooth(ring, values, value) {
     ring.forEach(function(point) {
       var x = point[0] - x0, y = point[1] - y0, xt = x | 0, yt = y | 0, v0, v1;
