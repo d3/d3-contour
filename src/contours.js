@@ -86,64 +86,64 @@ export default function() {
           if (f = fragmentByEnd[start]) {
             delete fragmentByEnd[f.end];
             delete fragmentByStart[f.start];
-            f.push(end);
-            f.end = end;
             if (g = fragmentByStart[end]) {
               delete fragmentByStart[g.start];
               delete fragmentByEnd[g.end];
-              fg = (f.pop(), f.concat(g));
+              fg = f.concat(g);
               fragmentByStart[fg.start = f.start] = fragmentByEnd[fg.end = g.end] = fg;
             } else if (g = fragmentByEnd[end]) {
               delete fragmentByStart[g.start];
               delete fragmentByEnd[g.end];
-              fg = (f.pop(), f.reverse(), g.concat(f));
+              fg = g.concat(f.reverse());
               fragmentByStart[fg.start = g.start] = fragmentByEnd[fg.end = f.start] = fg;
             } else {
+              f.push(end);
+              f.end = end;
               fragmentByStart[f.start] = f;
               fragmentByEnd[f.end] = f;
             }
           } else if (f = fragmentByStart[end]) {
             delete fragmentByStart[f.start];
             delete fragmentByEnd[f.end];
-            f.unshift(start);
-            f.start = start;
             if (g = fragmentByEnd[start]) {
               delete fragmentByStart[g.start];
               delete fragmentByEnd[g.end];
-              fg = (g.pop(), g.concat(f));
+              fg = g.concat(f);
               fragmentByStart[fg.start = g.start] = fragmentByEnd[fg.end = f.end] = fg;
             } else if (g = fragmentByStart[start]) {
-              fg = (f.reverse(), f.pop(), f.concat(g));
+              fg = f.reverse().concat(g);
               fragmentByStart[fg.start = f.end] = fragmentByEnd[fg.end = g.end] = fg;
             } else {
+              f.unshift(start);
+              f.start = start;
               fragmentByStart[f.start] = f;
               fragmentByEnd[f.end] = f;
             }
           } else if (f = fragmentByStart[start]) {
             delete fragmentByStart[f.start];
             delete fragmentByEnd[f.end];
-            f.unshift(end);
-            f.start = end;
             if (g = fragmentByEnd[end]) {
               delete fragmentByStart[g.start];
               delete fragmentByEnd[g.end];
-              fg = (g.pop(), g.concat(f));
+              fg = g.concat(f);
               fragmentByStart[fg.start = g.start] = fragmentByEnd[fg.end = f.end] = fg;
             } else { // Note: fragmentByStart[end] is null!
+              f.unshift(end);
+              f.start = end;
               fragmentByStart[f.start] = f;
               fragmentByEnd[f.end] = f;
             }
           } else if (f = fragmentByEnd[end]) {
             delete fragmentByStart[f.start];
             delete fragmentByEnd[f.end];
-            f.push(start);
-            f.end = start;
             if (g = fragmentByStart[start]) {
               delete fragmentByStart[g.start];
               delete fragmentByEnd[g.end];
-              fg = (f.pop(), f.concat(g));
+              fg = f.concat(g);
               fragmentByStart[fg.start = f.start] = fragmentByEnd[fg.end = g.end] = fg;
             } else { // Note: fragmentByEnd[start] is null!
+              f.push(start);
+              f.end = start;
               fragmentByStart[f.start] = f;
               fragmentByEnd[f.end] = f;
             }
