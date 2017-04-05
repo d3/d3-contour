@@ -101,20 +101,17 @@ export default function() {
                 f.ring.push(end);
                 rings.push(f.ring);
               } else {
-                f = {start: f.start, end: g.end, ring: f.ring.concat(g.ring)};
-                fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
+                fragmentByStart[f.start] = fragmentByEnd[g.end] = {start: f.start, end: g.end, ring: f.ring.concat(g.ring)};
               }
             } else if (g = fragmentByEnd[endIndex]) {
               delete fragmentByStart[f.start];
               delete fragmentByEnd[f.end];
               delete fragmentByEnd[g.end];
-              f = {start: g.start, end: f.start, ring: g.ring.concat(f.ring.reverse())};
-              fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
+              fragmentByStart[g.start] = fragmentByEnd[f.start] = {start: g.start, end: f.start, ring: g.ring.concat(f.ring.reverse())};
             } else {
               delete fragmentByEnd[f.end];
               f.ring.push(end);
-              f.end = endIndex;
-              fragmentByEnd[f.end] = f;
+              fragmentByEnd[f.end = endIndex] = f;
             }
           } else if (f = fragmentByStart[endIndex]) {
             if (g = fragmentByEnd[startIndex]) {
@@ -124,20 +121,17 @@ export default function() {
                 f.ring.push(end);
                 rings.push(f.ring);
               } else {
-                f = {start: g.start, end: f.end, ring: g.ring.concat(f.ring)};
-                fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
+                fragmentByStart[g.start] = fragmentByEnd[f.end] = {start: g.start, end: f.end, ring: g.ring.concat(f.ring)};
               }
             } else if (g = fragmentByStart[startIndex]) {
               delete fragmentByStart[f.start];
               delete fragmentByEnd[f.end];
               delete fragmentByStart[g.start];
-              f = {start: f.end, end: g.end, ring: f.ring.reverse().concat(g.ring)};
-              fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
+              fragmentByStart[f.end] = fragmentByEnd[g.end] = {start: f.end, end: g.end, ring: f.ring.reverse().concat(g.ring)};
             } else {
               delete fragmentByStart[f.start];
               f.ring.unshift(start);
-              f.start = startIndex;
-              fragmentByStart[f.start] = f;
+              fragmentByStart[f.start = startIndex] = f;
             }
           } else if (f = fragmentByStart[startIndex]) {
             if (g = fragmentByEnd[endIndex]) {
@@ -147,14 +141,12 @@ export default function() {
                 f.ring.push(start);
                 rings.push(f.ring);
               } else {
-                f = {start: g.start, end: f.end, ring: g.ring.concat(f.ring)};
-                fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
+                fragmentByStart[g.start] = fragmentByEnd[f.end] = {start: g.start, end: f.end, ring: g.ring.concat(f.ring)};
               }
             } else { // Note: fragmentByStart[endIndex] is null!
               delete fragmentByStart[f.start];
               f.ring.unshift(end);
-              f.start = endIndex;
-              fragmentByStart[f.start] = f;
+              fragmentByStart[f.start = endIndex] = f;
             }
           } else if (f = fragmentByEnd[endIndex]) {
             if (g = fragmentByStart[startIndex]) {
@@ -164,18 +156,15 @@ export default function() {
                 f.ring.push(start);
                 rings.push(f.ring);
               } else {
-                f = {start: f.start, end: g.end, ring: f.ring.concat(g.ring)};
-                fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
+                fragmentByStart[f.start] = fragmentByEnd[g.end] = {start: f.start, end: g.end, ring: f.ring.concat(g.ring)};
               }
             } else { // Note: fragmentByEnd[startIndex] is null!
               delete fragmentByEnd[f.end];
               f.ring.push(start);
-              f.end = startIndex;
-              fragmentByEnd[f.end] = f;
+              fragmentByEnd[f.end = startIndex] = f;
             }
           } else {
-            f = {start: startIndex, end: endIndex, ring: [start, end]};
-            fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
+            fragmentByStart[startIndex] = fragmentByEnd[endIndex] = {start: startIndex, end: endIndex, ring: [start, end]};
           }
         });
       }
@@ -195,12 +184,12 @@ export default function() {
       if (x > 0 && x < dx && xt === x) {
         v0 = values[yt * dx + x - 1];
         v1 = values[yt * dx + x];
-        point[0] = x + (value - v0) / (v1 - v0);
+        point[0] = x - 0.5 + (value - v0) / (v1 - v0);
       }
       if (y > 0 && y < dy && yt === y) {
         v0 = values[(y - 1) * dx + xt];
         v1 = values[y * dx + xt];
-        point[1] = y + (value - v0) / (v1 - v0);
+        point[1] = y - 0.5 + (value - v0) / (v1 - v0);
       }
     });
   }
