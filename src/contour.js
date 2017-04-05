@@ -2,7 +2,7 @@ var DX = [1,0,1,1,-1,0,-1,1,0,0,0,0,-1,0,-1,NaN], // marching direction lookup
     DY = [0,-1,0,0,0,-1,0,0,1,-1,1,1,0,-1,0,NaN];
 
 export default function(test, start) {
-  if (start == null) start = findStart(test);
+  // if (start == null) start = findStart(test);
 
   var points = [],
       x = +start[0],
@@ -41,18 +41,18 @@ export default function(test, start) {
   return points;
 }
 
-// Search for a starting point; begin at origin and proceed along outward-expanding diagonals.
-function findStart(test) {
-  var x = 0,
-      y = 0;
-  while (!test(x, y)) {
-    if (x === 0) {
-      x = y + 1;
-      y = 0;
-    } else {
-      x = x - 1;
-      y = y + 1;
-    }
-  }
-  return [x, y];
-}
+// // Search for a starting point; begin at origin and proceed along outward-expanding diagonals.
+// function findStart(test) {
+//   var x = 0,
+//       y = 0;
+//   while (!test(x, y)) {
+//     if (x === 0) {
+//       x = y + 1;
+//       y = 0;
+//     } else {
+//       x = x - 1;
+//       y = y + 1;
+//     }
+//   }
+//   return [x, y];
+// }
