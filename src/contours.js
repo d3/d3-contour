@@ -96,16 +96,12 @@ export default function() {
             if (g = fragmentByStart[endIndex]) {
               delete fragmentByEnd[f.end];
               delete fragmentByStart[g.start];
-              // if (f.ring.length + g.ring.length > 70) debugger;
-              // if (f === g) throw new Error;
               if (f !== g) f = {start: f.start, end: g.end, ring: f.ring.concat(g.ring)};
               fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
             } else if (g = fragmentByEnd[endIndex]) {
               delete fragmentByStart[f.start];
               delete fragmentByEnd[f.end];
               delete fragmentByEnd[g.end];
-              // if (f.ring.length + g.ring.length > 70) debugger;
-              if (f === g) throw new Error;
               f = {start: g.start, end: f.start, ring: g.ring.concat(f.ring.reverse())};
               fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
             } else {
@@ -118,15 +114,12 @@ export default function() {
             if (g = fragmentByEnd[startIndex]) {
               delete fragmentByStart[f.start];
               delete fragmentByEnd[g.end];
-              // if (f.ring.length + g.ring.length > 70) debugger;
               if (f !== g) f = {start: g.start, end: f.end, ring: g.ring.concat(f.ring)};
               fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
             } else if (g = fragmentByStart[startIndex]) {
               delete fragmentByStart[f.start];
               delete fragmentByEnd[f.end];
               delete fragmentByStart[g.start];
-              // if (f.ring.length + g.ring.length > 70) debugger;
-              if (f === g) throw new Error;
               f = {start: f.end, end: g.end, ring: f.ring.reverse().concat(g.ring)};
               fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
             } else {
@@ -139,7 +132,6 @@ export default function() {
             if (g = fragmentByEnd[endIndex]) {
               delete fragmentByStart[f.start];
               delete fragmentByEnd[g.end];
-              // if (f.ring.length + g.ring.length > 70) debugger;
               if (f !== g) f = {start: g.start, end: f.end, ring: g.ring.concat(f.ring)};
               fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
             } else { // Note: fragmentByStart[endIndex] is null!
@@ -152,7 +144,6 @@ export default function() {
             if (g = fragmentByStart[startIndex]) {
               delete fragmentByEnd[f.end];
               delete fragmentByStart[g.start];
-              // if (f.ring.length + g.ring.length > 70) debugger;
               if (f !== g) f = {start: f.start, end: g.end, ring: f.ring.concat(g.ring)};
               fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
             } else { // Note: fragmentByEnd[startIndex] is null!
