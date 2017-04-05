@@ -91,13 +91,11 @@ export default function() {
             if (g = fragmentByStart[end]) {
               delete fragmentByStart[g.start];
               delete fragmentByEnd[g.end];
-              if (g === f) throw new Error("not yet implemented");
-              fg = g === f ? f : (f.pop(), f.concat(g));
+              fg = (f.pop(), f.concat(g));
               fragmentByStart[fg.start = f.start] = fragmentByEnd[fg.end = g.end] = fg;
             } else if (g = fragmentByEnd[end]) {
               delete fragmentByStart[g.start];
               delete fragmentByEnd[g.end];
-              if (g === f) throw new Error("not yet implemented");
               fg = (f.pop(), f.reverse(), g.concat(f));
               fragmentByStart[fg.start = g.start] = fragmentByEnd[fg.end = f.start] = fg;
             } else {
@@ -112,11 +110,9 @@ export default function() {
             if (g = fragmentByEnd[start]) {
               delete fragmentByStart[g.start];
               delete fragmentByEnd[g.end];
-              if (g === f) throw new Error("not yet implemented");
-              fg = g === f ? f : (g.pop(), g.concat(f));
+              fg = (g.pop(), g.concat(f));
               fragmentByStart[fg.start = g.start] = fragmentByEnd[fg.end = f.end] = fg;
             } else if (g = fragmentByStart[start]) {
-              if (g === f) throw new Error("not yet implemented");
               fg = (f.reverse(), f.pop(), f.concat(g));
               fragmentByStart[fg.start = f.end] = fragmentByEnd[fg.end = g.end] = fg;
             } else {
@@ -131,8 +127,7 @@ export default function() {
             if (g = fragmentByEnd[end]) {
               delete fragmentByStart[g.start];
               delete fragmentByEnd[g.end];
-              if (g === f) throw new Error("not yet implemented");
-              fg = g === f ? f : (g.pop(), g.concat(f));
+              fg = (g.pop(), g.concat(f));
               fragmentByStart[fg.start = g.start] = fragmentByEnd[fg.end = f.end] = fg;
             } else { // Note: fragmentByStart[end] is null!
               fragmentByStart[f.start] = f;
@@ -146,8 +141,7 @@ export default function() {
             if (g = fragmentByStart[start]) {
               delete fragmentByStart[g.start];
               delete fragmentByEnd[g.end];
-              if (g === f) throw new Error("not yet implemented");
-              fg = g === f ? f : (f.pop(), f.concat(g));
+              fg = (f.pop(), f.concat(g));
               fragmentByStart[fg.start = f.start] = fragmentByEnd[fg.end = g.end] = fg;
             } else { // Note: fragmentByEnd[start] is null!
               fragmentByStart[f.start] = f;
