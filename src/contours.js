@@ -1,4 +1,4 @@
-import {thresholdSturges} from "d3-array";
+import {extent, thresholdSturges, ticks} from "d3-array";
 import {slice} from "./array";
 import constant from "./constant";
 
@@ -26,42 +26,27 @@ export default function() {
       y0 = 0,
       x1 = 960,
       y1 = 500,
-      // domain = extent,
+      dx = x1 - x0,
+      dy = y1 - y0,
       threshold = thresholdSturges;
 
   function contours(values) {
-    if (!(y1 >= y0) || !(x1 >= x0)) throw new Error; // TODO move to contours.{size,extent}
-
-    // var values = new Array((x1 - x0) * (y1 - y0));
-
-    // // Compute the grid of values.
-    // // TODO Allow the grid to be precomputed, so new thresholds can be dynamically computed.
-    // // TODO But if we do that, then we can’t generate smooth contours using the value function…
-    // // TODO However, we CAN generate smooth contours using linear interpolation of the gridded values.
-    // for (var y = y0, i = 0; y < y1; ++y) {
-    //   for (var x = x0; x < x1; ++x, ++i) {
-    //     values[i] = value(x, y);
-    //   }
-    // }
-
-    var // vz = domain(values),
-        // v0 = vz[0],
-        // v1 = vz[1],
-        tz = threshold(values); // , v0, v1);
+    var rings = [], tz = threshold(values);
 
     // Convert number of thresholds into uniform thresholds.
-    // if (!Array.isArray(tz)) tz = ticks(v0, v1, tz);
+    if (!Array.isArray(tz)) {
+      var domain = extent(values);
+      tz = ticks(domain[0], domain[1], tz);
+    }
 
-    var rings = [];
-
-    // Accumulate contour polygons. TODO Assign holes.
+    // Accumulate and smooth contour polygons. TODO Assign holes.
     tz.forEach(function(value) {
       isoline(function(x, y) {
         return x >= x0
             && y >= y0
             && x < x1
             && y < y1
-            && values[(y - y0) * (x1 - x0) + (x - x0)] < value;
+            && values[(y - y0) * dx + (x - x0)] < value;
       }).forEach(function(ring) {
         smooth(ring, values, value);
         rings.push(ring);
@@ -71,11 +56,8 @@ export default function() {
     return rings;
   }
 
-  function index(point) {
-    return ((point[0] - x0) << 1) + ((point[1] - y0) << 1) * ((x1 - x0) << 1);
-  }
-
-  function isoline(test) { // TODO fix add’l args
+  // Based on https://github.com/topojson/topojson-client/blob/v3.0.0/src/stitch.js
+  function isoline(test) {
     var rings = [],
         fragmentByStart = new Array,
         fragmentByEnd = new Array;
@@ -164,35 +146,38 @@ export default function() {
     return rings;
   }
 
+  function index(point) {
+    return ((point[0] - x0) << 1) + ((point[1] - y0) << 1) * (dx << 1);
+  }
+
   function smooth(ring, values, value) {
     ring.forEach(function(point) {
-      var x = point[0] - x0,
-          y = point[1] - y0,
-          v0, v1;
-      if (x > 0 && x < x1 - x0 && (x | 0) === x) {
-        v0 = values[(Math.floor(y) - y0) * (x1 - x0) + (x - 1 - x0)];
-        v1 = values[(Math.floor(y) - y0) * (x1 - x0) + (x - x0)];
+      var x = point[0] - x0, y = point[1] - y0, xt = x | 0, yt = y | 0, v0, v1;
+      if (x > 0 && x < dx && xt === x) {
+        v0 = values[yt * dx + x - 1];
+        v1 = values[yt * dx + x];
         point[0] = x + (value - v0) / (v1 - v0);
       }
-      if (y > 0 && y < y1 - y0 && (y | 0) === y) {
-        v0 = values[(y - 1 - y0) * (x1 - x0) + (Math.floor(x) - x0)];
-        v1 = values[(y - y0) * (x1 - x0) + (Math.floor(x) - x0)];
+      if (y > 0 && y < dy && yt === y) {
+        v0 = values[(y - 1) * dx + xt];
+        v1 = values[y * dx + xt];
         point[1] = y + (value - v0) / (v1 - v0);
       }
     });
   }
 
   contours.size = function(_) {
-    return arguments.length ? (x0 = y0 = 0, x1 = Math.ceil(_[0]), y1 = Math.ceil(_[1]), contours) : [x1 - x0, y1 - y0];
+    return arguments.length ? contours.extent([[0, 0], _]) : [dx, dy];
   };
 
   contours.extent = function(_) {
-    return arguments.length ? (x0 = Math.floor(_[0][0]), y0 = Math.floor(_[0][1]), x1 = Math.ceil(_[1][0]), y1 = Math.ceil(_[1][1]), contours) : [[x0, y0], [x1, y1]];
+    if (!arguments.length) return [[x0, y0], [x1, y1]];
+    var _00 = Math.floor(_[0][0]), _01 = Math.floor(_[0][1]), _10 = Math.ceil(_[1][0]), _11 = Math.ceil(_[1][1]);
+    if (!(_10 >= _00) || !(_11 >= _01)) throw new Error("invalid extent");
+    dx = (x1 = _10) - (x0 = _00);
+    dy = (y1 = _11) - (y0 = _01);
+    return contours;
   };
-
-  // contours.domain = function(_) {
-  //   return arguments.length ? (domain = typeof _ === "function" ? _ : constant([+_[0], +_[1]]), contours) : domain;
-  // };
 
   contours.thresholds = function(_) {
     return arguments.length ? (threshold = typeof _ === "function" ? _ : Array.isArray(_) ? constant(slice.call(_)) : constant(_), contours) : threshold;
