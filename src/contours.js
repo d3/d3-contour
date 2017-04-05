@@ -50,7 +50,6 @@ export default function() {
             && values[(y - y0) * dx + (x - x0)] < value; // TODO Inline this function.
       }).map(function(ring) {
         smooth(ring, values, value);
-        ring.push(ring[0]);
         return ring;
       });
     });
@@ -98,8 +97,13 @@ export default function() {
             if (g = fragmentByStart[endIndex]) {
               delete fragmentByEnd[f.end];
               delete fragmentByStart[g.start];
-              if (f !== g) f = {start: f.start, end: g.end, ring: f.ring.concat(g.ring)};
-              fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
+              if (f === g) {
+                f.ring.push(end);
+                rings.push(f.ring);
+              } else {
+                f = {start: f.start, end: g.end, ring: f.ring.concat(g.ring)};
+                fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
+              }
             } else if (g = fragmentByEnd[endIndex]) {
               delete fragmentByStart[f.start];
               delete fragmentByEnd[f.end];
@@ -116,8 +120,13 @@ export default function() {
             if (g = fragmentByEnd[startIndex]) {
               delete fragmentByStart[f.start];
               delete fragmentByEnd[g.end];
-              if (f !== g) f = {start: g.start, end: f.end, ring: g.ring.concat(f.ring)};
-              fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
+              if (f === g) {
+                f.ring.push(end);
+                rings.push(f.ring);
+              } else {
+                f = {start: g.start, end: f.end, ring: g.ring.concat(f.ring)};
+                fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
+              }
             } else if (g = fragmentByStart[startIndex]) {
               delete fragmentByStart[f.start];
               delete fragmentByEnd[f.end];
@@ -134,8 +143,13 @@ export default function() {
             if (g = fragmentByEnd[endIndex]) {
               delete fragmentByStart[f.start];
               delete fragmentByEnd[g.end];
-              if (f !== g) f = {start: g.start, end: f.end, ring: g.ring.concat(f.ring)};
-              fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
+              if (f === g) {
+                f.ring.push(start);
+                rings.push(f.ring);
+              } else {
+                f = {start: g.start, end: f.end, ring: g.ring.concat(f.ring)};
+                fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
+              }
             } else { // Note: fragmentByStart[endIndex] is null!
               delete fragmentByStart[f.start];
               f.ring.unshift(end);
@@ -146,8 +160,13 @@ export default function() {
             if (g = fragmentByStart[startIndex]) {
               delete fragmentByEnd[f.end];
               delete fragmentByStart[g.start];
-              if (f !== g) f = {start: f.start, end: g.end, ring: f.ring.concat(g.ring)};
-              fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
+              if (f === g) {
+                f.ring.push(start);
+                rings.push(f.ring);
+              } else {
+                f = {start: f.start, end: g.end, ring: f.ring.concat(g.ring)};
+                fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
+              }
             } else { // Note: fragmentByEnd[startIndex] is null!
               delete fragmentByEnd[f.end];
               f.ring.push(start);
@@ -160,10 +179,6 @@ export default function() {
           }
         });
       }
-    }
-
-    for (var k in fragmentByEnd) {
-      rings.push(fragmentByEnd[k].ring);
     }
 
     return rings;
