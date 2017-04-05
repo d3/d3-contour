@@ -52,7 +52,7 @@ export default function() {
     // Convert number of thresholds into uniform thresholds.
     if (!Array.isArray(tz)) tz = ticks(v0, v1, tz);
 
-    var fragments = [];
+    var rings = [];
 
     // Accumulate contour polygons. TODO Assign holes.
     tz.forEach(function(v) {
@@ -62,13 +62,13 @@ export default function() {
             && x < x1
             && y < y1
             && values[(y - y0) * (x1 - x0) + (x - x0)] < v; // TODO inclusive?
-      }, fragments);
+      }, rings);
     });
 
-    return fragments;
+    return rings;
   }
 
-  function contour(test, fragments) {
+  function contour(test, rings) {
     var fragmentByStart = {},
         fragmentByEnd = {};
 
@@ -87,17 +87,17 @@ export default function() {
             if (g = fragmentByStart[end]) {
               delete fragmentByEnd[f.end];
               delete fragmentByStart[g.start];
-              fg = f.concat(g);
-              fragmentByStart[fg.start = f.start] = fragmentByEnd[fg.end = g.end] = fg;
+              fg = {start: f.start, end: g.end, ring: f.ring.concat(g.ring)};
+              fragmentByStart[fg.start] = fragmentByEnd[fg.end] = fg;
             } else if (g = fragmentByEnd[end]) {
               delete fragmentByStart[f.start];
               delete fragmentByEnd[f.end];
               delete fragmentByEnd[g.end];
-              fg = g.concat(f.reverse());
-              fragmentByStart[fg.start = g.start] = fragmentByEnd[fg.end = f.start] = fg;
+              fg = {start: g.start, end: f.start, ring: g.ring.concat(f.ring.reverse())};
+              fragmentByStart[fg.start] = fragmentByEnd[fg.end] = fg;
             } else {
               delete fragmentByEnd[f.end];
-              f.push(end);
+              f.ring.push(end);
               f.end = end;
               fragmentByEnd[f.end] = f;
             }
@@ -105,17 +105,17 @@ export default function() {
             if (g = fragmentByEnd[start]) {
               delete fragmentByStart[f.start];
               delete fragmentByEnd[g.end];
-              fg = g.concat(f);
-              fragmentByStart[fg.start = g.start] = fragmentByEnd[fg.end = f.end] = fg;
+              fg = {start: g.start, end: f.end, ring: g.ring.concat(f.ring)};
+              fragmentByStart[fg.start] = fragmentByEnd[fg.end] = fg;
             } else if (g = fragmentByStart[start]) {
               delete fragmentByStart[f.start];
               delete fragmentByEnd[f.end];
               delete fragmentByStart[g.start];
-              fg = f.reverse().concat(g);
-              fragmentByStart[fg.start = f.end] = fragmentByEnd[fg.end = g.end] = fg;
+              fg = {start: f.end, end: g.end, ring: f.ring.reverse().concat(g.ring)};
+              fragmentByStart[fg.start] = fragmentByEnd[fg.end] = fg;
             } else {
               delete fragmentByStart[f.start];
-              f.unshift(start);
+              f.ring.unshift(start);
               f.start = start;
               fragmentByStart[f.start] = f;
             }
@@ -123,11 +123,11 @@ export default function() {
             if (g = fragmentByEnd[end]) {
               delete fragmentByStart[f.start];
               delete fragmentByEnd[g.end];
-              fg = g.concat(f);
-              fragmentByStart[fg.start = g.start] = fragmentByEnd[fg.end = f.end] = fg;
+              fg = {start: g.start, end: f.end, ring: g.ring.concat(f.ring)};
+              fragmentByStart[fg.start] = fragmentByEnd[fg.end] = fg;
             } else { // Note: fragmentByStart[end] is null!
               delete fragmentByStart[f.start];
-              f.unshift(end);
+              f.ring.unshift(end);
               f.start = end;
               fragmentByStart[f.start] = f;
             }
@@ -135,27 +135,24 @@ export default function() {
             if (g = fragmentByStart[start]) {
               delete fragmentByEnd[f.end];
               delete fragmentByStart[g.start];
-              fg = f.concat(g);
-              fragmentByStart[fg.start = f.start] = fragmentByEnd[fg.end = g.end] = fg;
+              fg = {start: f.start, end: g.end, ring: f.ring.concat(g.ring)};
+              fragmentByStart[fg.start] = fragmentByEnd[fg.end] = fg;
             } else { // Note: fragmentByEnd[start] is null!
               delete fragmentByEnd[f.end];
-              f.push(start);
+              f.ring.push(start);
               f.end = start;
               fragmentByEnd[f.end] = f;
             }
           } else {
-            f = [start, end];
-            fragmentByStart[f.start = start] = fragmentByEnd[f.end = end] = f;
+            f = {start: start, end: end, ring: [start, end]};
+            fragmentByStart[f.start] = fragmentByEnd[f.end] = f;
           }
         });
       }
     }
 
     for (var k in fragmentByEnd) {
-      var f = fragmentByEnd[k];
-      delete f.start;
-      delete f.end;
-      fragments.push(f);
+      rings.push(fragmentByEnd[k].ring);
     }
   }
 
