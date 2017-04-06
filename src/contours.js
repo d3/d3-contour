@@ -1,4 +1,4 @@
-import {extent, thresholdSturges, ticks} from "d3-array";
+import {extent, thresholdSturges, tickStep, range} from "d3-array";
 import {slice} from "./array";
 import area from "./area";
 import constant from "./constant";
@@ -41,8 +41,9 @@ export default function() {
 
     // Convert number of thresholds into uniform thresholds.
     if (!Array.isArray(tz)) {
-      var domain = extent(values);
-      tz = ticks(domain[0], domain[1], tz);
+      var domain = extent(values), start = domain[0], stop = domain[1];
+      tz = tickStep(start, stop, tz);
+      tz = range(Math.floor(start / tz) * tz, Math.floor(stop / tz) * tz, tz);
     } else {
       tz = tz.slice().sort(ascending);
     }
@@ -61,7 +62,7 @@ export default function() {
             && y >= y0
             && x < x1
             && y < y1
-            && values[(y - y0) * dx + (x - x0)] > value
+            && values[(y - y0) * dx + (x - x0)] >= value
       }).forEach(function(ring) {
         smooth(ring, values, value);
         if (area(ring) > 0) polygons.push([ring]);
