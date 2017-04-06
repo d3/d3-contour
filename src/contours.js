@@ -91,7 +91,6 @@ export default function() {
 
   // Marching squares with isolines stitched into rings.
   // Based on https://github.com/topojson/topojson-client/blob/v3.0.0/src/stitch.js
-  // TODO Remove the reverse cases—this can’t happen now that I fixed the winding order of the segments.
   function isoline(test) {
     var rings = [],
         fragmentByStart = new Array,
@@ -116,11 +115,6 @@ export default function() {
               } else {
                 fragmentByStart[f.start] = fragmentByEnd[g.end] = {start: f.start, end: g.end, ring: f.ring.concat(g.ring)};
               }
-            } else if (g = fragmentByEnd[endIndex]) {
-              delete fragmentByStart[f.start];
-              delete fragmentByEnd[f.end];
-              delete fragmentByEnd[g.end];
-              fragmentByStart[g.start] = fragmentByEnd[f.start] = {start: g.start, end: f.start, ring: g.ring.concat(f.ring.reverse())};
             } else {
               delete fragmentByEnd[f.end];
               f.ring.push(end);
@@ -136,45 +130,10 @@ export default function() {
               } else {
                 fragmentByStart[g.start] = fragmentByEnd[f.end] = {start: g.start, end: f.end, ring: g.ring.concat(f.ring)};
               }
-            } else if (g = fragmentByStart[startIndex]) {
-              delete fragmentByStart[f.start];
-              delete fragmentByEnd[f.end];
-              delete fragmentByStart[g.start];
-              fragmentByStart[f.end] = fragmentByEnd[g.end] = {start: f.end, end: g.end, ring: f.ring.reverse().concat(g.ring)};
             } else {
               delete fragmentByStart[f.start];
               f.ring.unshift(start);
               fragmentByStart[f.start = startIndex] = f;
-            }
-          } else if (f = fragmentByStart[startIndex]) {
-            if (g = fragmentByEnd[endIndex]) {
-              delete fragmentByStart[f.start];
-              delete fragmentByEnd[g.end];
-              if (f === g) {
-                f.ring.push(start);
-                rings.push(f.ring);
-              } else {
-                fragmentByStart[g.start] = fragmentByEnd[f.end] = {start: g.start, end: f.end, ring: g.ring.concat(f.ring)};
-              }
-            } else { // Note: fragmentByStart[endIndex] is null!
-              delete fragmentByStart[f.start];
-              f.ring.unshift(end);
-              fragmentByStart[f.start = endIndex] = f;
-            }
-          } else if (f = fragmentByEnd[endIndex]) {
-            if (g = fragmentByStart[startIndex]) {
-              delete fragmentByEnd[f.end];
-              delete fragmentByStart[g.start];
-              if (f === g) {
-                f.ring.push(start);
-                rings.push(f.ring);
-              } else {
-                fragmentByStart[f.start] = fragmentByEnd[g.end] = {start: f.start, end: g.end, ring: f.ring.concat(g.ring)};
-              }
-            } else { // Note: fragmentByEnd[startIndex] is null!
-              delete fragmentByEnd[f.end];
-              f.ring.push(start);
-              fragmentByEnd[f.end = startIndex] = f;
             }
           } else {
             fragmentByStart[startIndex] = fragmentByEnd[endIndex] = {start: startIndex, end: endIndex, ring: [start, end]};
