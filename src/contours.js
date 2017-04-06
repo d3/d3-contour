@@ -1,25 +1,26 @@
 import {extent, thresholdSturges, ticks} from "d3-array";
 import {slice} from "./array";
+import area from "./area";
 import constant from "./constant";
 import contains from "./contains";
 
 var cases = [
-  [],
-  [[[0.5,1],[1,1.5]]],
-  [[[1,1.5],[1.5,1]]],
-  [[[0.5,1],[1.5,1]]],
-  [[[1,0.5],[1.5,1]]],
-  [[[0.5,1],[1,0.5]],[[1,1.5],[1.5,1]]],
-  [[[1,0.5],[1,1.5]]],
-  [[[0.5,1],[1,0.5]]],
-  [[[0.5,1],[1,0.5]]],
-  [[[1,0.5],[1,1.5]]],
-  [[[0.5,1],[1,1.5]],[[1,0.5],[1.5,1]]],
-  [[[1,0.5],[1.5,1]]],
-  [[[0.5,1],[1.5,1]]],
-  [[[1,1.5],[1.5,1]]],
-  [[[0.5,1],[1,1.5]]],
-  []
+  [], // 0
+  [[[0.5,1],[1,1.5]]], // 1
+  [[[1,1.5],[1.5,1]]], // 2
+  [[[0.5,1],[1.5,1]]], // 3
+  [[[1.5,1],[1,0.5]]], // 4
+  [[[0.5,1],[1,0.5]],[[1.5,1],[1,1.5]]], // 5
+  [[[1,1.5],[1,0.5]]], // 6
+  [[[0.5,1],[1,0.5]]], // 7
+  [[[1,0.5],[0.5,1]]], // 8
+  [[[1,0.5],[1,1.5]]], // 9
+  [[[1,1.5],[0.5,1]],[[1,0.5],[1.5,1]]], // 10
+  [[[1,0.5],[1.5,1]]], // 11
+  [[[1.5,1],[0.5,1]]], // 12
+  [[[1.5,1],[1,1.5]]], // 13
+  [[[1,1.5],[0.5,1]]], // 14
+  [] // 15
 ];
 
 export default function() {
@@ -40,35 +41,39 @@ export default function() {
       tz = ticks(domain[0], domain[1], tz);
     }
 
-    // Accumulate and smooth contour rings.
+    // Accumulate, smooth contour rings, assign holes to exterior rings.
+    // Based on https://github.com/mbostock/shapefile/blob/v0.6.2/shp/polygon.js
     var layers = tz.map(function(value) {
-      return isoline(function(x, y) {
+      var polygons = [],
+          holes = [];
+
+      isoline(function(x, y) {
         return x >= x0
             && y >= y0
             && x < x1
             && y < y1
-            && values[(y - y0) * dx + (x - x0)] < value; // TODO Inline this function.
-      }).map(function(ring) {
+            && values[(y - y0) * dx + (x - x0)] < value // TODO Inline this function.
+      }).forEach(function(ring) {
+        ring.reverse();
         smooth(ring, values, value);
-        return ring;
+        if (area(ring) > 0) polygons.push([ring]);
+        else holes.push(ring);
       });
+
+      holes.forEach(function(hole) {
+        for (var i = 0, n = polygons.length, polygon; i < n; ++i) {
+          if (contains((polygon = polygons[i])[0], hole)) {
+            polygon.push(hole);
+            return;
+          }
+        }
+      });
+
+      return polygons;
     });
 
-    // Assign holes to polygons.
-    // Based on https://github.com/mbostock/shapefile/blob/v0.6.2/shp/polygon.js
-    return layers.map(function(rings, i) {
-      var polygons = []
-      rings.forEach(function(ring1) {
-        var polygon = [ring1];
-        if (i > 0) layers[i - 1].forEach(hole);
-        if (i < layers.length - 1) layers[i + 1].forEach(hole);
-        function hole(ring0) {
-          var c = polygon.length && contains(ring1, ring0);
-          if (c === 0) polygon.length = 0; // TODO This is broken.
-          else if (c > 0) polygon.push(ring0.slice().reverse());
-        }
-        if (polygon.length) polygons.push(polygon);
-      });
+    // TODO Subsequent layers may need to be clipped by earlier layers.
+    return layers.map(function(polygons, i) {
       return {
         type: "MultiPolygon",
         value: tz[i],
