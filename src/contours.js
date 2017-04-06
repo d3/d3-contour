@@ -81,24 +81,47 @@ export default function() {
   function isorings(values, value, callback) {
     var fragmentByStart = new Array,
         fragmentByEnd = new Array,
-        x, y = -2, t0, t1, t2, t3;
+        x, y, t0, t1, t2, t3;
 
-    while (++y < dy) {
+    // Special case for the first row (y = -1, t2 = t3 = 0).
+    x = y = -1;
+    t1 = values[0] >= value;
+    cases[t1 << 1].forEach(stitch);
+    while (++x < dx - 1) {
+      t0 = t1, t1 = values[x + 1] >= value;
+      cases[t0 | t1 << 1].forEach(stitch);
+    }
+    cases[t1 << 0].forEach(stitch);
+
+    // General case for the intermediate rows.
+    while (++y < dy - 1) {
       x = -1;
-      t1 = y + 1 < dy && values[y * dx + dx] >= value;
-      t2 = y >= 0 && values[y * dx] >= value;
+      t1 = values[y * dx + dx] >= value;
+      t2 = values[y * dx] >= value;
       cases[t1 << 1 | t2 << 2].forEach(stitch);
       while (++x < dx - 1) {
-        t0 = t1, t1 = y + 1 < dy && values[y * dx + dx + x + 1] >= value;
-        t3 = t2, t2 = y >= 0 && values[y * dx + x + 1] >= value;
+        t0 = t1, t1 = values[y * dx + dx + x + 1] >= value;
+        t3 = t2, t2 = values[y * dx + x + 1] >= value;
         cases[t0 | t1 << 1 | t2 << 2 | t3 << 3].forEach(stitch);
       }
       cases[t1 | t2 << 3].forEach(stitch);
     }
 
+    // Special case for the last row (y = dy - 1, t0 = t1 = 0).
+    x = -1;
+    t2 = values[y * dx] >= value;
+    cases[t2 << 2].forEach(stitch);
+    while (++x < dx - 1) {
+      t3 = t2, t2 = values[y * dx + x + 1] >= value;
+      cases[t2 << 2 | t3 << 3].forEach(stitch);
+    }
+    cases[t2 << 3].forEach(stitch);
+
     function stitch(line) {
-      var start = [line[0][0] + x, line[0][1] + y], startIndex = index(start),
-          end = [line[1][0] + x, line[1][1] + y], endIndex = index(end),
+      var start = [line[0][0] + x, line[0][1] + y],
+          end = [line[1][0] + x, line[1][1] + y],
+          startIndex = index(start),
+          endIndex = index(end),
           f, g;
       if (f = fragmentByEnd[startIndex]) {
         if (g = fragmentByStart[endIndex]) {
