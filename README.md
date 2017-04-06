@@ -2,7 +2,7 @@
 
 Compute contour polygons using marching squares.
 
-[<img alt="Contour Plot" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/volcano.gif" width="435" height="305">](https://bl.ocks.org/mbostock/4241134)
+[<img alt="Contour Plot" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/volcano.gif" width="420" height="295">](https://bl.ocks.org/mbostock/4241134)
 
 [<img alt="Contour Plot II" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/goldstein-price.png" width="420" height="219">](https://bl.ocks.org/mbostock/f48ff9c1af4d637c9a518727f5fdfef5)
 
