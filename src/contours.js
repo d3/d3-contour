@@ -26,8 +26,8 @@ var cases = [
 ];
 
 export default function() {
-  var dx = 960,
-      dy = 500,
+  var dx = 1,
+      dy = 1,
       threshold = thresholdSturges,
       smooth = smoothLinear;
 
@@ -185,7 +185,7 @@ export default function() {
   contours.size = function(_) {
     if (!arguments.length) return [dx, dy];
     var _0 = Math.ceil(_[0]), _1 = Math.ceil(_[1]);
-    if (!(_0 >= 1) || !(_1 >= 1)) throw new Error("invalid extent");
+    if (!(_0 > 0) || !(_1 > 0)) throw new Error("invalid size");
     return dx = _0, dy = _1, contours;
   };
 
