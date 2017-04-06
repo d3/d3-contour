@@ -10,17 +10,25 @@ If you use NPM, `npm install d3-contour`. Otherwise, download the [latest releas
 <script src="https://d3js.org/d3-contour.v0.0.min.js"></script>
 <script>
 
-var points = d3.contour(geq(0));
-
-function geq(value) {
-  return function(i, j) {
-    return i >= 0
-        && j >= 0
-        && i < width
-        && j < height
-        && values[i + j * width] >= value;
-  };
+// See https://en.wikipedia.org/wiki/Test_functions_for_optimization
+function goldsteinPrice(x, y) {
+  return (1 + Math.pow(x + y + 1, 2) * (19 - 14 * x + 3 * x * x - 14 * y + 6 * x * x + 3 * y * y))
+      * (30 + Math.pow(2 * x - 3 * y, 2) * (18 - 32 * x + 12 * x * x + 48 * y - 36 * x * y + 27 * y * y));
 }
+
+// Compute a grid of values where -2 ≤ x ≤ 2 and -2 ≤ y ≤ 1.
+var width = 256, height = 256, values = new Array(width * height);
+for (var j = 0.5, k = 0; j < height; ++j) {
+  for (var i = 0.5; i < width; ++i, ++k) {
+    values[k] = goldsteinPrice(i / width * 4 - 2, 1 - j / height * 3);
+  }
+}
+
+// Compute the contour polygons at log-spaced intervals; returns an array of MultiPolygon.
+var contours = d3.contours()
+    .size([width, height])
+    .thresholds(d3.range(2, 21).map(p => Math.pow(2, p)))
+    (values);
 
 </script>
 ```
@@ -29,6 +37,22 @@ function geq(value) {
 
 ## API Reference
 
-<a name="contour" href="#contour">#</a> d3.<b>contour</b>(<i>test</i>[, <i>start</i>]) [<>](https://github.com/d3/d3-contour/blob/master/src/contour.js "Source")
+<a name="contours" href="#contours">#</a> d3.<b>contours</b>() [<>](https://github.com/d3/d3-contour/blob/master/src/contours.js "Source")
+
+…
+
+<a name="_contours" href="#_contours">#</a> <i>contours</i>(<i>values</i>)
+
+…
+
+<a name="contours_size" href="#contours_size">#</a> <i>contours</i>.<b>size</b>([<i>size</i>])
+
+…
+
+<a name="contours_smooth" href="#contours_smooth">#</a> <i>contours</i>.<b>smooth</b>([<i>smooth</i>])
+
+…
+
+<a name="contours_thresholds" href="#contours_thresholds">#</a> <i>contours</i>.<b>thresholds</b>([<i>thresholds</i>])
 
 …
