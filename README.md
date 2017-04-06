@@ -69,7 +69,7 @@ The returned geometry objects are typically passed to [d3.geoPath](https://githu
 
 <a name="contours_size" href="#contours_size">#</a> <i>contours</i>.<b>size</b>([<i>size</i>])
 
-If *size* is specified, sets the expected size of the input *values* grid to the [contour generator](#_contour) and returns the contour generator. The *size* is specified as an array \[<i>n</i>, <i>m</i>\] where <i>n</i> is the number of columns in the grid and <i>m</i> is the number of rows. Both *n* and *m* must be positive integers. If *size* is not specified, returns the current size which defaults to [1, 1].
+If *size* is specified, sets the expected size of the input *values* grid to the [contour generator](#_contour) and returns the contour generator. The *size* is specified as an array \[<i>n</i>, <i>m</i>\] where <i>n</i> is the number of columns in the grid and <i>m</i> is the number of rows; *n* and *m* must be positive integers. If *size* is not specified, returns the current size which defaults to [1, 1].
 
 <a name="contours_smooth" href="#contours_smooth">#</a> <i>contours</i>.<b>smooth</b>([<i>smooth</i>])
 
