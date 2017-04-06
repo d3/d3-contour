@@ -150,16 +150,19 @@ export default function() {
   // TODO Allow smoothing to be disabled.
   function smooth(ring, values, value) {
     ring.forEach(function(point) {
-      var x = point[0], y = point[1], xt = x | 0, yt = y | 0, v0, v1;
+      var x = point[0],
+          y = point[1],
+          xt = x | 0,
+          yt = y | 0,
+          v0,
+          v1 = values[yt * dx + xt];
       if (x > 0 && x < dx && xt === x) {
-        v0 = values[yt * dx + x - 1];
-        v1 = values[yt * dx + x];
-        point[0] = x - 0.5 + (value - v0) / (v1 - v0);
+        v0 = values[yt * dx + xt - 1];
+        point[0] = x + (value - v0) / (v1 - v0) - 0.5;
       }
       if (y > 0 && y < dy && yt === y) {
-        v0 = values[(y - 1) * dx + xt];
-        v1 = values[y * dx + xt];
-        point[1] = y - 0.5 + (value - v0) / (v1 - v0);
+        v0 = values[(yt - 1) * dx + xt];
+        point[1] = y + (value - v0) / (v1 - v0) - 0.5;
       }
     });
   }
