@@ -4,6 +4,8 @@ Compute contour polygons using marching squares.
 
 [<img alt="Contour Plot" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/volcano.gif" width="435" height="305">](https://bl.ocks.org/mbostock/4241134)
 
+[<img alt="Contour Plot II" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/goldstein-price.png" width="420" height="219">](https://bl.ocks.org/mbostock/f48ff9c1af4d637c9a518727f5fdfef5)
+
 ## Installing
 
 If you use NPM, `npm install d3-contour`. Otherwise, download the [latest release](https://github.com/d3/d3-contour/releases/latest). You can also load directly from [d3js.org](https://d3js.org), either as a [standalone library](https://d3js.org/d3-contour.v1.min.js) or as part of [D3 4.0](https://github.com/d3/d3). AMD, CommonJS, and vanilla environments are supported. In vanilla, a `d3` global is exported:
