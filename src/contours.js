@@ -1,8 +1,10 @@
 import {extent, thresholdSturges, tickStep, range} from "d3-array";
 import {slice} from "./array";
+import ascending from "./ascending";
 import area from "./area";
 import constant from "./constant";
 import contains from "./contains";
+import noop from "./noop";
 
 var cases = [
   [],
@@ -23,14 +25,11 @@ var cases = [
   []
 ];
 
-function ascending(a, b) {
-  return a - b;
-}
-
 export default function() {
   var dx = 960,
       dy = 500,
-      threshold = thresholdSturges;
+      threshold = thresholdSturges,
+      smooth = smoothLinear;
 
   function contours(values) {
     var tz = threshold(values);
@@ -146,9 +145,7 @@ export default function() {
     return point[0] * 2 + point[1] * (dx + 1) * 4;
   }
 
-  // Linear interpolation of contour points.
-  // TODO Allow smoothing to be disabled.
-  function smooth(ring, values, value) {
+  function smoothLinear(ring, values, value) {
     ring.forEach(function(point) {
       var x = point[0],
           y = point[1],
@@ -176,6 +173,10 @@ export default function() {
 
   contours.thresholds = function(_) {
     return arguments.length ? (threshold = typeof _ === "function" ? _ : Array.isArray(_) ? constant(slice.call(_)) : constant(_), contours) : threshold;
+  };
+
+  contours.smooth = function(_) {
+    return arguments.length ? (smooth = _ ? smoothLinear : noop, contours) : smooth === smoothLinear;
   };
 
   return contours;
