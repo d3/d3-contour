@@ -5,23 +5,27 @@ import constant from "./constant";
 import contains from "./contains";
 
 var cases = [
-  [], // 0
-  [[[0.5,1],[1,1.5]]], // 1
-  [[[1,1.5],[1.5,1]]], // 2
-  [[[0.5,1],[1.5,1]]], // 3
-  [[[1.5,1],[1,0.5]]], // 4
-  [[[0.5,1],[1,0.5]],[[1.5,1],[1,1.5]]], // 5
-  [[[1,1.5],[1,0.5]]], // 6
-  [[[0.5,1],[1,0.5]]], // 7
-  [[[1,0.5],[0.5,1]]], // 8
-  [[[1,0.5],[1,1.5]]], // 9
-  [[[1,1.5],[0.5,1]],[[1,0.5],[1.5,1]]], // 10
-  [[[1,0.5],[1.5,1]]], // 11
-  [[[1.5,1],[0.5,1]]], // 12
-  [[[1.5,1],[1,1.5]]], // 13
-  [[[1,1.5],[0.5,1]]], // 14
-  [] // 15
+  [],
+  [[[1,1.5],[0.5,1]]],
+  [[[1.5,1],[1,1.5]]],
+  [[[1.5,1],[0.5,1]]],
+  [[[1,0.5],[1.5,1]]],
+  [[[1,0.5],[0.5,1]],[[1,1.5],[1.5,1]]],
+  [[[1,0.5],[1,1.5]]],
+  [[[1,0.5],[0.5,1]]],
+  [[[0.5,1],[1,0.5]]],
+  [[[1,1.5],[1,0.5]]],
+  [[[0.5,1],[1,1.5]],[[1.5,1],[1,0.5]]],
+  [[[1.5,1],[1,0.5]]],
+  [[[0.5,1],[1.5,1]]],
+  [[[1,1.5],[1.5,1]]],
+  [[[0.5,1],[1,1.5]]],
+  []
 ];
+
+function ascending(a, b) {
+  return a - b;
+}
 
 export default function() {
   var x0 = 0,
@@ -39,6 +43,8 @@ export default function() {
     if (!Array.isArray(tz)) {
       var domain = extent(values);
       tz = ticks(domain[0], domain[1], tz);
+    } else {
+      tz = tz.slice().sort(ascending);
     }
 
     // Accumulate, smooth contour rings, assign holes to exterior rings.
@@ -47,14 +53,16 @@ export default function() {
       var polygons = [],
           holes = [];
 
+      // TODO Inline the test function to improve performance.
+      // TODO Move the bounds-checking outside of the test function.
+      // TODO Fix the beveling that occurs on the canvas corners?
       isoline(function(x, y) {
         return x >= x0
             && y >= y0
             && x < x1
             && y < y1
-            && values[(y - y0) * dx + (x - x0)] < value // TODO Inline this function.
+            && values[(y - y0) * dx + (x - x0)] > value
       }).forEach(function(ring) {
-        ring.reverse();
         smooth(ring, values, value);
         if (area(ring) > 0) polygons.push([ring]);
         else holes.push(ring);
@@ -72,7 +80,6 @@ export default function() {
       return polygons;
     });
 
-    // TODO Subsequent layers may need to be clipped by earlier layers.
     return layers.map(function(polygons, i) {
       return {
         type: "MultiPolygon",
@@ -84,6 +91,7 @@ export default function() {
 
   // Marching squares with isolines stitched into rings.
   // Based on https://github.com/topojson/topojson-client/blob/v3.0.0/src/stitch.js
+  // TODO Remove the reverse cases—this can’t happen now that I fixed the winding order of the segments.
   function isoline(test) {
     var rings = [],
         fragmentByStart = new Array,
