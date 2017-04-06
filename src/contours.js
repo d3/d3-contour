@@ -28,12 +28,8 @@ function ascending(a, b) {
 }
 
 export default function() {
-  var x0 = 0,
-      y0 = 0,
-      x1 = 960,
-      y1 = 500,
-      dx = x1 - x0,
-      dy = y1 - y0,
+  var dx = 960,
+      dy = 500,
       threshold = thresholdSturges;
 
   function contours(values) {
@@ -58,11 +54,11 @@ export default function() {
       // TODO Move the bounds-checking outside of the test function.
       // TODO Fix the beveling that occurs on the canvas corners?
       isoline(function(x, y) {
-        return x >= x0
-            && y >= y0
-            && x < x1
-            && y < y1
-            && values[(y - y0) * dx + (x - x0)] >= value
+        return x >= 0
+            && y >= 0
+            && x < dx
+            && y < dy
+            && values[y * dx + x] >= value
       }).forEach(function(ring) {
         smooth(ring, values, value);
         if (area(ring) > 0) polygons.push([ring]);
@@ -97,8 +93,8 @@ export default function() {
         fragmentByStart = new Array,
         fragmentByEnd = new Array;
 
-    for (var y = y0 - 1; y < y1; ++y) {
-      for (var x = x0 - 1; x < x1; ++x) {
+    for (var y = -1; y < dy; ++y) {
+      for (var x = -1; x < dx; ++x) {
         cases[(test(x, y + 1) << 0)
             | (test(x + 1, y + 1) << 1)
             | (test(x + 1, y) << 2)
@@ -147,13 +143,13 @@ export default function() {
   }
 
   function index(point) {
-    return (point[0] - x0) * 2 + (point[1] - y0) * (dx + 1) * 4;
+    return point[0] * 2 + point[1] * (dx + 1) * 4;
   }
 
   // Linear interpolation of contour points.
   function smooth(ring, values, value) {
     ring.forEach(function(point) {
-      var x = point[0] - x0, y = point[1] - y0, xt = x | 0, yt = y | 0, v0, v1;
+      var x = point[0], y = point[1], xt = x | 0, yt = y | 0, v0, v1;
       if (x > 0 && x < dx && xt === x) {
         v0 = values[yt * dx + x - 1];
         v1 = values[yt * dx + x];
@@ -168,16 +164,10 @@ export default function() {
   }
 
   contours.size = function(_) {
-    return arguments.length ? contours.extent([[0, 0], _]) : [dx, dy];
-  };
-
-  contours.extent = function(_) {
-    if (!arguments.length) return [[x0, y0], [x1, y1]];
-    var _00 = Math.floor(_[0][0]), _01 = Math.floor(_[0][1]), _10 = Math.ceil(_[1][0]), _11 = Math.ceil(_[1][1]);
-    if (!(_10 >= _00) || !(_11 >= _01)) throw new Error("invalid extent");
-    dx = (x1 = _10) - (x0 = _00);
-    dy = (y1 = _11) - (y0 = _01);
-    return contours;
+    if (!arguments.length) return [dx, dy];
+    var _0 = Math.ceil(_[0]), _1 = Math.ceil(_[1]);
+    if (!(_0 >= 0) || !(_1 >= 0)) throw new Error("invalid extent");
+    return dx = _0, dy = _1, contours;
   };
 
   contours.thresholds = function(_) {
