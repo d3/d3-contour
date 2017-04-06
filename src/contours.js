@@ -49,16 +49,7 @@ export default function() {
       var polygons = [],
           holes = [];
 
-      // TODO Inline the test function to improve performance.
-      // TODO Move the bounds-checking outside of the test function.
-      // TODO Fix the beveling that occurs on the canvas corners?
-      isoline(function(x, y) {
-        return x >= 0
-            && y >= 0
-            && x < dx
-            && y < dy
-            && values[y * dx + x] >= value;
-      }).forEach(function(ring) {
+      isorings(values, value, function(ring) {
         smooth(ring, values, value);
         if (area(ring) > 0) polygons.push([ring]);
         else holes.push(ring);
@@ -87,58 +78,62 @@ export default function() {
 
   // Marching squares with isolines stitched into rings.
   // Based on https://github.com/topojson/topojson-client/blob/v3.0.0/src/stitch.js
-  function isoline(test) {
-    var rings = [],
-        fragmentByStart = new Array,
-        fragmentByEnd = new Array;
+  function isorings(values, value, callback) {
+    var fragmentByStart = new Array,
+        fragmentByEnd = new Array,
+        x, y = -2, t0, t1, t2, t3;
 
-    for (var y = -1; y < dy; ++y) {
-      for (var x = -1; x < dx; ++x) {
-        cases[(test(x, y + 1) << 0)
-            | (test(x + 1, y + 1) << 1)
-            | (test(x + 1, y) << 2)
-            | (test(x, y) << 3)].forEach(function(line) {
-          var start = [line[0][0] + x, line[0][1] + y], startIndex = index(start),
-              end = [line[1][0] + x, line[1][1] + y], endIndex = index(end),
-              f, g;
-          if (f = fragmentByEnd[startIndex]) {
-            if (g = fragmentByStart[endIndex]) {
-              delete fragmentByEnd[f.end];
-              delete fragmentByStart[g.start];
-              if (f === g) {
-                f.ring.push(end);
-                rings.push(f.ring);
-              } else {
-                fragmentByStart[f.start] = fragmentByEnd[g.end] = {start: f.start, end: g.end, ring: f.ring.concat(g.ring)};
-              }
-            } else {
-              delete fragmentByEnd[f.end];
-              f.ring.push(end);
-              fragmentByEnd[f.end = endIndex] = f;
-            }
-          } else if (f = fragmentByStart[endIndex]) {
-            if (g = fragmentByEnd[startIndex]) {
-              delete fragmentByStart[f.start];
-              delete fragmentByEnd[g.end];
-              if (f === g) {
-                f.ring.push(end);
-                rings.push(f.ring);
-              } else {
-                fragmentByStart[g.start] = fragmentByEnd[f.end] = {start: g.start, end: f.end, ring: g.ring.concat(f.ring)};
-              }
-            } else {
-              delete fragmentByStart[f.start];
-              f.ring.unshift(start);
-              fragmentByStart[f.start = startIndex] = f;
-            }
-          } else {
-            fragmentByStart[startIndex] = fragmentByEnd[endIndex] = {start: startIndex, end: endIndex, ring: [start, end]};
-          }
-        });
+    while (++y < dy) {
+      x = -1;
+      t1 = y + 1 < dy && values[y * dx + dx] >= value;
+      t2 = y >= 0 && values[y * dx] >= value;
+      cases[t1 << 1 | t2 << 2].forEach(stitch);
+      while (++x < dx - 1) {
+        t0 = t1, t1 = y + 1 < dy && values[y * dx + dx + x + 1] >= value;
+        t3 = t2, t2 = y >= 0 && values[y * dx + x + 1] >= value;
+        cases[t0 | t1 << 1 | t2 << 2 | t3 << 3].forEach(stitch);
       }
+      cases[t1 | t2 << 3].forEach(stitch);
     }
 
-    return rings;
+    function stitch(line) {
+      var start = [line[0][0] + x, line[0][1] + y], startIndex = index(start),
+          end = [line[1][0] + x, line[1][1] + y], endIndex = index(end),
+          f, g;
+      if (f = fragmentByEnd[startIndex]) {
+        if (g = fragmentByStart[endIndex]) {
+          delete fragmentByEnd[f.end];
+          delete fragmentByStart[g.start];
+          if (f === g) {
+            f.ring.push(end);
+            callback(f.ring);
+          } else {
+            fragmentByStart[f.start] = fragmentByEnd[g.end] = {start: f.start, end: g.end, ring: f.ring.concat(g.ring)};
+          }
+        } else {
+          delete fragmentByEnd[f.end];
+          f.ring.push(end);
+          fragmentByEnd[f.end = endIndex] = f;
+        }
+      } else if (f = fragmentByStart[endIndex]) {
+        if (g = fragmentByEnd[startIndex]) {
+          delete fragmentByStart[f.start];
+          delete fragmentByEnd[g.end];
+          if (f === g) {
+            f.ring.push(end);
+            callback(f.ring);
+          } else {
+            fragmentByStart[g.start] = fragmentByEnd[f.end] = {start: g.start, end: f.end, ring: g.ring.concat(f.ring)};
+          }
+        } else {
+          delete fragmentByStart[f.start];
+          f.ring.unshift(start);
+          fragmentByStart[f.start = startIndex] = f;
+        }
+      } else {
+        fragmentByStart[startIndex] = fragmentByEnd[endIndex] = {start: startIndex, end: endIndex, ring: [start, end]};
+      }
+    }
   }
 
   function index(point) {
@@ -167,7 +162,7 @@ export default function() {
   contours.size = function(_) {
     if (!arguments.length) return [dx, dy];
     var _0 = Math.ceil(_[0]), _1 = Math.ceil(_[1]);
-    if (!(_0 >= 0) || !(_1 >= 0)) throw new Error("invalid extent");
+    if (!(_0 >= 1) || !(_1 >= 1)) throw new Error("invalid extent");
     return dx = _0, dy = _1, contours;
   };
 
