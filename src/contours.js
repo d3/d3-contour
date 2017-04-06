@@ -58,7 +58,7 @@ export default function() {
             && y >= 0
             && x < dx
             && y < dy
-            && values[y * dx + x] >= value
+            && values[y * dx + x] >= value;
       }).forEach(function(ring) {
         smooth(ring, values, value);
         if (area(ring) > 0) polygons.push([ring]);
@@ -147,6 +147,7 @@ export default function() {
   }
 
   // Linear interpolation of contour points.
+  // TODO Allow smoothing to be disabled.
   function smooth(ring, values, value) {
     ring.forEach(function(point) {
       var x = point[0], y = point[1], xt = x | 0, yt = y | 0, v0, v1;
