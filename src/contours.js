@@ -147,7 +147,7 @@ export default function() {
   }
 
   function index(point) {
-    return ((point[0] - x0) << 1) + ((point[1] - y0) << 1) * (dx << 1);
+    return (point[0] - x0) * 2 + (point[1] - y0) * (dx + 1) * 4;
   }
 
   // Linear interpolation of contour points.
