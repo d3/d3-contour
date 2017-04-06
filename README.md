@@ -1,6 +1,8 @@
 # d3-contour
 
-…
+Compute contour polygons using marching squares.
+
+[<img alt="Contour Plot" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/volcano.gif" width="435" height="305">](https://bl.ocks.org/mbostock/4241134)
 
 ## Installing
 
