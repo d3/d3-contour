@@ -16,7 +16,7 @@ Contour plots are also useful for visualizing two-dimensional continuous functio
 
 [<img alt="Contour Plot II" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/goldstein-price.png" width="420" height="219">](https://bl.ocks.org/mbostock/f48ff9c1af4d637c9a518727f5fdfef5)
 
-The above examples use SVG, but here is an animated contour plot of a simple trigonometric function using Canvas:
+And here is an animated contour plot of a simple trigonometric function using Canvas:
 
 [<img alt="Contour Plot III" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/sin-cos.png" width="420" height="219">](https://bl.ocks.org/mbostock/bf2f5f02b62b5b3bb92ae1b59b53da36)
 
