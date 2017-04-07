@@ -1,6 +1,6 @@
 # d3-contour
 
-This library computes contour polygons by applying the marching squares algorithm to a rectangular grid of numeric values. For example, here is a visualization of Maungawhau’s topology (the classic `volcano` dataset and `terrain.colors` from R):
+This library computes contour polygons by applying the marching squares algorithm to a rectangular grid of numeric values. For example, this shows Maungawhau’s topology (the classic `volcano` dataset and `terrain.colors` from R):
 
 [<img alt="Contour Plot" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/volcano.gif" width="420" height="295">](https://bl.ocks.org/mbostock/4241134)
 
