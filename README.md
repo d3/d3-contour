@@ -8,7 +8,7 @@ The generated polygons are represented as GeoJSON MultiPolygon geometry objects 
 
 [<img alt="GeoTiff Contours" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/temperature.png" width="420" height="219">](https://bl.ocks.org/mbostock/4886c227038510f1c103ce305bef6fcc)
 
-After computing contours, you can transform or reproject the contour polygons to suit your display. For example, here are the same contours of surface temperatures, but displayed in the Natural Earth projection rather than equirectangular coordinates:
+After computing contours, you can transform or reproject the contour polygons to suit your desired display. For example, here are the same contours of surface temperatures, but displayed in the Natural Earth projection rather than equirectangular coordinates:
 
 [<img alt="GeoTiff Contours II" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/reprojection.png" width="420" height="219">](https://bl.ocks.org/mbostock/83c0be21dba7602ee14982b020b12f51)
 
