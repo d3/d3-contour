@@ -6,7 +6,7 @@ A contour plot of Maungawhau’s topology (the R `volcano` dataset):
 
 [<img alt="Contour Plot" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/volcano.gif" width="420" height="295">](https://bl.ocks.org/mbostock/4241134)
 
-A contour plot of surface temperatures read from a GeoTIFF, also reprojected:
+A contour plot of surface temperatures read from a GeoTIFF, in two projections:
 
 [<img alt="GeoTiff Contours" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/temperature.png" width="420" height="219">](https://bl.ocks.org/mbostock/4886c227038510f1c103ce305bef6fcc)
 
