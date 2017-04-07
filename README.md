@@ -1,22 +1,22 @@
 # d3-contour
 
-Compute contour polygons using marching squares.
-
-A contour plot of Maungawhau’s topology (the R `volcano` dataset):
+This library computes contour polygons by applying the marching squares algorithm to a rectangular grid of numeric values. For example, here is a visualization of Maungawhau’s topology (R’s `volcano` dataset and `terrain.colors`):
 
 [<img alt="Contour Plot" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/volcano.gif" width="420" height="295">](https://bl.ocks.org/mbostock/4241134)
 
-A contour plot of surface temperatures read from a GeoTIFF, in two projections:
+The generated polygons are represented as GeoJSON MultiPolygon geometry objects in planar coordinates, where coordinate ⟨<i>i</i> + 0.5, <i>j</i> + 0.5⟩ corresponds to element <i>i</i> + <i>jn</i> in the input <i>values</i> array. Such datasets are often stored in GeoTIFF format. Here is an example that loads a GeoTIFF of surface temperatures:
 
 [<img alt="GeoTiff Contours" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/temperature.png" width="420" height="219">](https://bl.ocks.org/mbostock/4886c227038510f1c103ce305bef6fcc)
 
+After computing contours, you can transform or reproject the contour polygons to suit your display. For example, here are the same contours of surface temperatures, but displayed in the Natural Earth projection rather than equirectangular coordinates:
+
 [<img alt="GeoTiff Contours II" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/reprojection.png" width="420" height="219">](https://bl.ocks.org/mbostock/83c0be21dba7602ee14982b020b12f51)
 
-A contour plot of the Goldstein–Price function:
+Contour plots are also useful for visualizing two-dimensional continuous functions. In this case, the grid of values is computed dynamically before computing the polygons. Here is the Goldstein–Price function:
 
 [<img alt="Contour Plot II" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/goldstein-price.png" width="420" height="219">](https://bl.ocks.org/mbostock/f48ff9c1af4d637c9a518727f5fdfef5)
 
-An animated contour plot of a simple trigonometric function using Canvas:
+Since the output of this library is GeoJSON, you can display it (and transform it) using standard tools; see [d3.geoPath](https://github.com/d3/d3-geo/blob/master/README.md#geoPath), for example. The above examples use SVG, but here is an animated contour plot of a simple trigonometric function using Canvas:
 
 [<img alt="Contour Plot III" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/sin-cos.png" width="420" height="219">](https://bl.ocks.org/mbostock/bf2f5f02b62b5b3bb92ae1b59b53da36)
 
