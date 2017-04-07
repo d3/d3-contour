@@ -12,6 +12,10 @@ Since the contour polygons are GeoJSON, you can transform and display them using
 
 [<img alt="GeoTiff Contours II" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/reprojection.png" width="420" height="219">](https://bl.ocks.org/mbostock/83c0be21dba7602ee14982b020b12f51)
 
+Other raster image formats, such as PNG, may also be used as source data for contours. If the input image is noisy, you can generate smooth contours by first blurring the image. For example, here are animated contour lines showing global cloud fraction:
+
+[<img alt="Cloud Contours" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/clouds.png" width="420" height="219">](https://bl.ocks.org/mbostock/818053c76d79d4841790c332656bf9da)
+
 Contour plots are also useful for visualizing two-dimensional continuous functions. In this case, the array of values is computed dynamically before computing the polygons. Here is the Goldstein–Price function:
 
 [<img alt="Contour Plot II" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/goldstein-price.png" width="420" height="219">](https://bl.ocks.org/mbostock/f48ff9c1af4d637c9a518727f5fdfef5)
