@@ -4,11 +4,11 @@ This library computes contour polygons by applying the marching squares algorith
 
 [<img alt="Contour Plot" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/volcano.gif" width="420" height="295">](https://bl.ocks.org/mbostock/4241134)
 
-The generated polygons are represented as GeoJSON MultiPolygon geometry objects in planar coordinates, where coordinate ⟨<i>i</i> + 0.5, <i>j</i> + 0.5⟩ corresponds to element <i>i</i> + <i>jn</i> in the input <i>values</i> array. Such datasets are often stored in GeoTIFF format. Here is an example that loads a GeoTIFF of surface temperatures:
+The generated polygons are represented as GeoJSON MultiPolygon geometry objects in planar coordinates, where ⟨<i>i</i> + 0.5, <i>j</i> + 0.5⟩ corresponds to element <i>i</i> + <i>jn</i> in the input <i>values</i> array. Such datasets are commonly stored in the GeoTIFF format; here is an example that loads a GeoTIFF of surface temperatures:
 
 [<img alt="GeoTiff Contours" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/temperature.png" width="420" height="219">](https://bl.ocks.org/mbostock/4886c227038510f1c103ce305bef6fcc)
 
-After computing contours, you can transform or reproject the contour polygons to suit your desired display. Here are the same contours of surface temperatures displayed in the Natural Earth projection:
+The contour polygons are represented as GeoJSON, so you can transform and display them using standard tools; see [d3.geoPath](https://github.com/d3/d3-geo/blob/master/README.md#geoPath), [d3.geoProject](https://github.com/d3/d3-geo-projection/blob/master/README.md#geoProject) and [d3.geoStitch](https://github.com/d3/d3-geo-projection/blob/master/README.md#geoStitch), for example. Here are the same contours of surface temperatures displayed in the Natural Earth projection:
 
 [<img alt="GeoTiff Contours II" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/reprojection.png" width="420" height="219">](https://bl.ocks.org/mbostock/83c0be21dba7602ee14982b020b12f51)
 
@@ -16,7 +16,7 @@ Contour plots are also useful for visualizing two-dimensional continuous functio
 
 [<img alt="Contour Plot II" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/goldstein-price.png" width="420" height="219">](https://bl.ocks.org/mbostock/f48ff9c1af4d637c9a518727f5fdfef5)
 
-Since the output of this library is GeoJSON, you can display it (and transform it) using standard tools; see [d3.geoPath](https://github.com/d3/d3-geo/blob/master/README.md#geoPath), for example. The above examples use SVG, but here is an animated contour plot of a simple trigonometric function using Canvas:
+The above examples use SVG, but here is an animated contour plot of a simple trigonometric function using Canvas:
 
 [<img alt="Contour Plot III" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/sin-cos.png" width="420" height="219">](https://bl.ocks.org/mbostock/bf2f5f02b62b5b3bb92ae1b59b53da36)
 
