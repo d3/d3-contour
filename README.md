@@ -24,11 +24,11 @@ And here is a trippy animation of a simple trigonometric function:
 
 [<img alt="Contour Plot III" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/sin-cos.png" width="420" height="219">](https://bl.ocks.org/mbostock/bf2f5f02b62b5b3bb92ae1b59b53da36)
 
-Contour plots can visualize the [estimated density](#density-estimation) of point clouds, and avoid overplotting in larger datasets. This library also implements fast two-dimensional kernel density estimation for contour generation; see [d3.contourDensity](#contourDensity). For example, here is a scatterplot showing the relationship between the idle duration and active duration for Old Faithful’s eruptions:
+Contours can also show the [estimated density](#density-estimation) of point clouds, and avoid overplotting in large datasets. This library also implements fast two-dimensional kernel density estimation; see [d3.contourDensity](#contourDensity). For example, here is a scatterplot showing the relationship between the idle duration and eruption duration for Old Faithful:
 
 [<img alt="Density Contours" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/faithful.png" width="420" height="219">](https://bl.ocks.org/mbostock/e3f4376d54e02d5d43ae32a7cf0e6aa9)
 
-And here is a scatterplot showing the relationship between the weight and price of 53,940 diamonds:
+And here is a density contour plot showing the relationship between the weight and price of 53,940 diamonds:
 
 [<img alt="Density Contours" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/diamonds.png" width="420" height="420">](https://bl.ocks.org/mbostock/7f5f22524bd1d824dd53c535eda0187f)
 
