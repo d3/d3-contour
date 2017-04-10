@@ -10,3 +10,4 @@ extends:
 
 rules:
     no-cond-assign: 0
+    no-unexpected-multiline: 0

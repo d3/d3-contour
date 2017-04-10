@@ -57,7 +57,7 @@ export default function() {
     return contours()
         .thresholds(tz)
         .size([n, m])
-        (values0)
+      (values0)
         .map(transform);
   }
 
