@@ -24,6 +24,10 @@ And here is a trippy animation of a simple trigonometric function:
 
 [<img alt="Contour Plot III" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/sin-cos.png" width="420" height="219">](https://bl.ocks.org/mbostock/bf2f5f02b62b5b3bb92ae1b59b53da36)
 
+Contour plots can visualize the [estimated density](#density-estimation) of point clouds, and avoid overplotting in larger datasets. This library also implements fast two-dimensional kernel density estimation for contour generation; see [d3.contourDensity](#contourDensity). For example, here is a scatterplot showing the relationship between the idle duration and active duration for Old Faithful’s eruptions:
+
+[<img alt="Density Contours" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/faithful.png" width="420" height="219">](https://bl.ocks.org/mbostock/e3f4376d54e02d5d43ae32a7cf0e6aa9)
+
 ## Installing
 
 If you use NPM, `npm install d3-contour`. Otherwise, download the [latest release](https://github.com/d3/d3-contour/releases/latest). You can also load directly from [d3js.org](https://d3js.org), either as a [standalone library](https://d3js.org/d3-contour.v1.min.js) or as part of [D3 4.0](https://github.com/d3/d3). AMD, CommonJS, and vanilla environments are supported. In vanilla, a `d3` global is exported:
@@ -100,3 +104,57 @@ If *thresholds* is specified, sets the threshold generator to the specified func
 Thresholds are defined as an array of values [*x0*, *x1*, …]. The first [generated contour](#_contour) corresponds to the area where the input values are greater than or equal to *x0*; the second contour corresponds to the area where the input values are greater than or equal to *x1*, and so on. Thus, there is exactly one generated MultiPolygon geometry object for each specified threshold value; the threshold value is exposed as <i>geometry</i>.value.
 
 If a *count* is specified instead of an array of *thresholds*, then the input values’ [extent](https://github.com/d3/d3-array/blob/master/README.md#extent) will be uniformly divided into approximately *count* bins; see [d3.ticks](https://github.com/d3/d3-array/blob/master/README.md#ticks).
+
+## Density Estimation
+
+<a name="contourDensity" href="#contourDensity">#</a> d3.<b>contourDensity</b>() [<>](https://github.com/d3/d3-contour/blob/master/src/density.js "Source")
+
+Constructs a new density estimator with the default settings.
+
+<a name="_density" href="#_density">#</a> <i>density</i>(<i>data</i>) [<>](https://github.com/d3/d3-contour/blob/master/src/density.js#L27 "Source")
+
+Estimates the density contours for the given array of *data*, returning an array of [GeoJSON](http://geojson.org/geojson-spec.html) [MultiPolygon](http://geojson.org/geojson-spec.html#multipolygon) [geometry objects](http://geojson.org/geojson-spec.html#geometry-objects). Each geometry object represents the area where the estimated number of points per square pixel is greater than or equal to the corresponding [threshold value](#density_thresholds); the threshold value for each geometry object is exposed as <i>geometry</i>.value.
+
+The *x*- and *y*-coordinate for each data point are computed using [*density*.x](#density_x) and [*density*.y](#density_y). The generated contours are only accurate within the estimator’s [defined size](#density_size).
+
+The returned geometry objects are typically passed to [d3.geoPath](https://github.com/d3/d3-geo/blob/master/README.md#geoPath) to display, using null or [d3.geoIdentity](https://github.com/d3/d3-geo/blob/master/README.md#geoIdentity) as the associated projection.
+
+<a name="density_x" href="#density_x">#</a> <i>density</i>.<b>x</b>([<i>x</i>]) [<>](https://github.com/d3/d3-contour/blob/master/src/density.js#L91 "Source")
+
+If *x* is specified, sets the *x*-coordinate accessor. If *x* is not specified, returns the current *x*-coordinate accessor, which defaults to:
+
+```js
+function x(d) {
+  return d[0];
+}
+```
+
+<a name="density_y" href="#density_y">#</a> <i>density</i>.<b>y</b>([<i>y</i>]) [<>](https://github.com/d3/d3-contour/blob/master/src/density.js#L95 "Source")
+
+If *y* is specified, sets the *y*-coordinate accessor. If *y* is not specified, returns the current *y*-coordinate accessor, which defaults to:
+
+```js
+function y(d) {
+  return d[1];
+}
+```
+
+<a name="density_size" href="#density_size">#</a> <i>density</i>.<b>size</b>([<i>size</i>]) [<>](https://github.com/d3/d3-contour/blob/master/src/density.js#L99 "Source")
+
+If *size* is specified, sets the size of the density estimator to the specified bounds and returns the estimator. The *size* is specified as an array \[<i>width</i>, <i>height</i>\], where <i>width</i> is the maximum *x*-value and <i>height</i> is the maximum *y*-value. If *size* is not specified, returns the current size which defaults to [960, 500]. The [estimated density contours](#_density) are only accurate within the defined size.
+
+<a name="density_cellSize" href="#density_cellSize">#</a> <i>density</i>.<b>cellSize</b>([<i>cellSize</i>]) [<>](https://github.com/d3/d3-contour/blob/master/src/density.js#L106 "Source")
+
+If *cellSize* is specified, sets the size of individual cells in the underlying bin grid to the specified positive integer and returns the estimator. If *cellSize* is not specified, returns the current cell size, which defaults to 4. The cell size is rounded down to the nearest power of two. Smaller cells produce more detailed contour polygons, but are more expensive to compute.
+
+<a name="density_thresholds" href="#density_thresholds">#</a> <i>density</i>.<b>thresholds</b>([<i>thresholds</i>]) [<>](https://github.com/d3/d3-contour/blob/master/src/density.js#L112 "Source")
+
+If *thresholds* is specified, sets the threshold generator to the specified function or array and returns this contour generator. If *thresholds* is not specified, returns the current threshold generator, which by default generates about twenty nicely-rounded density thresholds.
+
+Thresholds are defined as an array of values [*x0*, *x1*, …]. The first [generated density contour](#_density) corresponds to the area where the estimated density is greater than or equal to *x0*; the second contour corresponds to the area where the estimated density is greater than or equal to *x1*, and so on. Thus, there is exactly one generated MultiPolygon geometry object for each specified threshold value; the threshold value is exposed as <i>geometry</i>.value. The first value *x0* should typically be greater than zero.
+
+If a *count* is specified instead of an array of *thresholds*, then approximately *count* uniformly-spaced nicely-rounded thresholds will be generated; see [d3.ticks](https://github.com/d3/d3-array/blob/master/README.md#ticks).
+
+<a name="density_bandwidth" href="#density_bandwidth">#</a> <i>density</i>.<b>bandwidth</b>([<i>bandwidth</i>]) [<>](https://github.com/d3/d3-contour/blob/master/src/density.js#L116 "Source")
+
+If *bandwidth* is specified, sets the bandwidth (the standard deviation) of the Gaussian kernel and returns the estimate. If *bandwidth* is not specified, returns the current bandwidth, which defaults to 20.4939…. The specified *bandwidth* is currently rounded to the nearest supported value by this implementation, and must be nonnegative.
