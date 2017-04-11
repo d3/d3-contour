@@ -16,13 +16,9 @@ Other raster image formats, such as PNG, may also be used as source data for con
 
 [<img alt="Cloud Contours" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/clouds.png" width="420" height="219">](https://bl.ocks.org/mbostock/818053c76d79d4841790c332656bf9da)
 
-Contour plots are also useful for visualizing two-dimensional continuous functions. In this case, the array of values is computed dynamically before computing the polygons. Here is the Goldstein–Price function:
+Contour plots are also useful for visualizing two-dimensional continuous functions. In this case, the array of values is computed dynamically before computing the polygons. Here is the Goldstein–Price function and a trippy animation of *sin*(*x* + *y*)*sin*(*x* - *y*):
 
-[<img alt="Contour Plot II" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/goldstein-price.png" width="420" height="219">](https://bl.ocks.org/mbostock/f48ff9c1af4d637c9a518727f5fdfef5)
-
-And here is a trippy animation of a simple trigonometric function:
-
-[<img alt="Contour Plot III" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/sin-cos.png" width="420" height="219">](https://bl.ocks.org/mbostock/bf2f5f02b62b5b3bb92ae1b59b53da36)
+[<img alt="Contour Plot II" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/goldstein-price.png" width="420" height="219">](https://bl.ocks.org/mbostock/f48ff9c1af4d637c9a518727f5fdfef5)[<img alt="Contour Plot III" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/sin-cos.png" width="420" height="219">](https://bl.ocks.org/mbostock/bf2f5f02b62b5b3bb92ae1b59b53da36)
 
 Contours can also show the [estimated density](#density-estimation) of point clouds, and avoid overplotting in large datasets. This library also implements fast two-dimensional kernel density estimation; see [d3.contourDensity](#contourDensity). For example, here is a scatterplot showing the relationship between the idle duration and eruption duration for Old Faithful:
 
