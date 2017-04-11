@@ -6,7 +6,8 @@ This library computes contour polygons by applying [marching squares](https://en
 
 For each input [threshold value](#contours_thresholds), the [contour generator](#_contours) constructs a GeoJSON MultiPolygon geometry object representing the area where the input values are greater than or equal to the threshold value. The geometry is in planar coordinates, where ⟨<i>i</i> + 0.5, <i>j</i> + 0.5⟩ corresponds to element <i>i</i> + <i>jn</i> in the input values array. Here is an example that loads a GeoTIFF of surface temperatures, and another that blurs a monochrome PNG to produce smooth contours from noisy source data:
 
-[<img alt="GeoTiff Contours" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/temperature.png" width="420" height="219">](https://bl.ocks.org/mbostock/4886c227038510f1c103ce305bef6fcc)[<img alt="Cloud Contours" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/clouds.png" width="420" height="219">](https://bl.ocks.org/mbostock/818053c76d79d4841790c332656bf9da)
+[<img alt="GeoTiff Contours" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/temperature.png" width="420" height="219">](https://bl.ocks.org/mbostock/4886c227038510f1c103ce305bef6fcc)
+[<img alt="Cloud Contours" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/clouds.png" width="420" height="219">](https://bl.ocks.org/mbostock/818053c76d79d4841790c332656bf9da)
 
 Since the contour polygons are GeoJSON, you can transform and display them using standard tools; see [d3.geoPath](https://github.com/d3/d3-geo/blob/master/README.md#geoPath), [d3.geoProject](https://github.com/d3/d3-geo-projection/blob/master/README.md#geoProject) and [d3.geoStitch](https://github.com/d3/d3-geo-projection/blob/master/README.md#geoStitch), for example. Here are the same contours of surface temperatures displayed in the Natural Earth projection:
 
@@ -14,7 +15,8 @@ Since the contour polygons are GeoJSON, you can transform and display them using
 
 Contour plots are also useful for visualizing two-dimensional continuous functions. In this case, the array of values is computed dynamically before computing the polygons. Here is the Goldstein–Price function and a trippy animation of *sin*(*x* + *y*)*sin*(*x* - *y*):
 
-[<img alt="Contour Plot II" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/goldstein-price.png" width="420" height="219">](https://bl.ocks.org/mbostock/f48ff9c1af4d637c9a518727f5fdfef5)[<img alt="Contour Plot III" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/sin-cos.png" width="420" height="219">](https://bl.ocks.org/mbostock/bf2f5f02b62b5b3bb92ae1b59b53da36)
+[<img alt="Contour Plot II" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/goldstein-price.png" width="420" height="219">](https://bl.ocks.org/mbostock/f48ff9c1af4d637c9a518727f5fdfef5)
+[<img alt="Contour Plot III" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/sin-cos.png" width="420" height="219">](https://bl.ocks.org/mbostock/bf2f5f02b62b5b3bb92ae1b59b53da36)
 
 Contours can also show the [estimated density](#density-estimation) of point clouds, and avoid overplotting in large datasets. This library also implements fast two-dimensional kernel density estimation; see [d3.contourDensity](#contourDensity). For example, here is a scatterplot showing the relationship between the idle duration and eruption duration for Old Faithful:
 
