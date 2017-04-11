@@ -4,7 +4,7 @@ This library computes contour polygons by applying [marching squares](https://en
 
 [<img alt="Contour Plot" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/volcano.gif" width="420" height="295">](https://bl.ocks.org/mbostock/4241134)
 
-For each input [threshold value](#contours_thresholds), the [contour generator](#_contours) constructs a GeoJSON MultiPolygon geometry object representing the area where the input values are greater than or equal to the threshold value. The geometry is in planar coordinates, where ⟨<i>i</i> + 0.5, <i>j</i> + 0.5⟩ corresponds to element <i>i</i> + <i>jn</i> in the input values array. Here is an example that loads a GeoTIFF of surface temperatures, and another that blurs a noisy monochrome PNG to produce smooth contours of cloud fraction:
+For each [threshold value](#contours_thresholds), the [contour generator](#_contours) constructs a GeoJSON MultiPolygon geometry object representing the area where the input values are greater than or equal to the threshold value. The geometry is in planar coordinates, where ⟨<i>i</i> + 0.5, <i>j</i> + 0.5⟩ corresponds to element <i>i</i> + <i>jn</i> in the input values array. Here is an example that loads a GeoTIFF of surface temperatures, and another that blurs a noisy monochrome PNG to produce smooth contours of cloud fraction:
 
 [<img alt="GeoTiff Contours" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/temperature.png" width="420" height="219">](https://bl.ocks.org/mbostock/4886c227038510f1c103ce305bef6fcc)
 [<img alt="Cloud Contours" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/clouds.png" width="420" height="219">](https://bl.ocks.org/mbostock/818053c76d79d4841790c332656bf9da)
