@@ -18,7 +18,7 @@ Contour plots can also visualize continuous functions by sampling. Here is the G
 [<img alt="Contour Plot II" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/goldstein-price.png" width="420" height="219">](https://bl.ocks.org/mbostock/f48ff9c1af4d637c9a518727f5fdfef5)
 [<img alt="Contour Plot III" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/sin-cos.png" width="420" height="219">](https://bl.ocks.org/mbostock/bf2f5f02b62b5b3bb92ae1b59b53da36)
 
-Contours can also show the [estimated density](#density-estimation) of point clouds, which is especially useful to avoid overplotting in large datasets. This library implements fast two-dimensional kernel density estimation; see [d3.contourDensity](#contourDensity). For example, here is a scatterplot showing the relationship between the idle duration and eruption duration for Old Faithful:
+Contours can also show the [estimated density](#density-estimation) of point clouds, which is especially useful to avoid overplotting in large datasets. This library implements fast two-dimensional kernel density estimation; see [d3.contourDensity](#contourDensity). Here is a scatterplot showing the relationship between the idle duration and eruption duration for Old Faithful:
 
 [<img alt="Density Contours" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/faithful.png" width="420" height="219">](https://bl.ocks.org/mbostock/e3f4376d54e02d5d43ae32a7cf0e6aa9)
 
