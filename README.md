@@ -13,7 +13,7 @@ Since the contour polygons are GeoJSON, you can transform and display them using
 
 [<img alt="GeoTiff Contours II" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/reprojection.png" width="420" height="219">](https://bl.ocks.org/mbostock/83c0be21dba7602ee14982b020b12f51)
 
-Contour plots are also useful for visualizing two-dimensional continuous functions. In this case, the array of values is computed dynamically before computing the polygons. Here is the Goldstein–Price function and a trippy animation of *sin*(*x* + *y*)*sin*(*x* - *y*):
+Contour plots can also visualize continuous functions by sampling. Here is the Goldstein–Price function and a trippy animation of *sin*(*x* + *y*)*sin*(*x* - *y*):
 
 [<img alt="Contour Plot II" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/goldstein-price.png" width="420" height="219">](https://bl.ocks.org/mbostock/f48ff9c1af4d637c9a518727f5fdfef5)
 [<img alt="Contour Plot III" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/sin-cos.png" width="420" height="219">](https://bl.ocks.org/mbostock/bf2f5f02b62b5b3bb92ae1b59b53da36)
