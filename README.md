@@ -4,17 +4,13 @@ This library computes contour polygons by applying [marching squares](https://en
 
 [<img alt="Contour Plot" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/volcano.gif" width="420" height="295">](https://bl.ocks.org/mbostock/4241134)
 
-For each input [threshold value](#contours_thresholds), the [contour generator](#_contours) constructs a GeoJSON MultiPolygon geometry object representing the area where the input values are greater than or equal to the threshold value. The geometry is in planar coordinates, where ⟨<i>i</i> + 0.5, <i>j</i> + 0.5⟩ corresponds to element <i>i</i> + <i>jn</i> in the input values array. Such datasets are commonly stored in the GeoTIFF format. Here is an example that loads a GeoTIFF of surface temperatures:
+For each input [threshold value](#contours_thresholds), the [contour generator](#_contours) constructs a GeoJSON MultiPolygon geometry object representing the area where the input values are greater than or equal to the threshold value. The geometry is in planar coordinates, where ⟨<i>i</i> + 0.5, <i>j</i> + 0.5⟩ corresponds to element <i>i</i> + <i>jn</i> in the input values array. Here is an example that loads a GeoTIFF of surface temperatures, and another that blurs a monochrome PNG to produce smooth contours from noisy source data:
 
-[<img alt="GeoTiff Contours" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/temperature.png" width="420" height="219">](https://bl.ocks.org/mbostock/4886c227038510f1c103ce305bef6fcc)
+[<img alt="GeoTiff Contours" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/temperature.png" width="420" height="219">](https://bl.ocks.org/mbostock/4886c227038510f1c103ce305bef6fcc)[<img alt="Cloud Contours" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/clouds.png" width="420" height="219">](https://bl.ocks.org/mbostock/818053c76d79d4841790c332656bf9da)
 
 Since the contour polygons are GeoJSON, you can transform and display them using standard tools; see [d3.geoPath](https://github.com/d3/d3-geo/blob/master/README.md#geoPath), [d3.geoProject](https://github.com/d3/d3-geo-projection/blob/master/README.md#geoProject) and [d3.geoStitch](https://github.com/d3/d3-geo-projection/blob/master/README.md#geoStitch), for example. Here are the same contours of surface temperatures displayed in the Natural Earth projection:
 
 [<img alt="GeoTiff Contours II" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/reprojection.png" width="420" height="219">](https://bl.ocks.org/mbostock/83c0be21dba7602ee14982b020b12f51)
-
-Other raster image formats, such as PNG, may also be used as source data for contours. If the input image is noisy, you can generate smooth contours by first blurring the image. For example, here are animated contour lines showing global cloud fraction:
-
-[<img alt="Cloud Contours" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/clouds.png" width="420" height="219">](https://bl.ocks.org/mbostock/818053c76d79d4841790c332656bf9da)
 
 Contour plots are also useful for visualizing two-dimensional continuous functions. In this case, the array of values is computed dynamically before computing the polygons. Here is the Goldstein–Price function and a trippy animation of *sin*(*x* + *y*)*sin*(*x* - *y*):
 
