@@ -57,7 +57,7 @@ export default function() {
 
       holes.forEach(function(hole) {
         for (var i = 0, n = polygons.length, polygon; i < n; ++i) {
-          if (contains((polygon = polygons[i])[0], hole)) {
+          if (contains((polygon = polygons[i])[0], hole) !== -1) {
             polygon.push(hole);
             return;
           }
