@@ -22,7 +22,7 @@
     "url": "https://github.com/d3/d3-contour.git"
   },
   "scripts": {
-    "pretest": "rm -rf build && mkdir build && rollup --banner \"$(preamble)\" -f umd -n d3 -g d3-array:d3 -o build/d3-contour.js -- index.js",
+    "pretest": "rm -rf build && mkdir build && rollup -c --banner \"$(preamble)\"",
     "test": "tape 'test/**/*-test.js' && eslint index.js src",
     "prepublish": "npm run test && uglifyjs -b beautify=false,preamble=\"'$(preamble)'\" build/d3-contour.js -c -m -o build/d3-contour.min.js",
     "postpublish": "git push && git push --tags && cd ../d3.github.com && git pull && cp ../d3-contour/build/d3-contour.js d3-contour.v1.js && cp ../d3-contour/build/d3-contour.min.js d3-contour.v1.min.js && git add d3-contour.v1.js d3-contour.v1.min.js && git commit -m \"d3-contour ${npm_package_version}\" && git push && cd - && zip -j build/d3-contour.zip -- LICENSE README.md build/d3-contour.js build/d3-contour.min.js"
@@ -30,7 +30,7 @@
   "devDependencies": {
     "eslint": "4",
     "package-preamble": "0.1",
-    "rollup": "0.43",
+    "rollup": "0.50",
     "tape": "4",
     "uglify-js": "3"
   },
