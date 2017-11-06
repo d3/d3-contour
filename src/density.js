@@ -12,9 +12,14 @@ function defaultY(d) {
   return d[1];
 }
 
+function defaultCount() {
+  return 1;
+}
+
 export default function() {
   var x = defaultX,
       y = defaultY,
+      count = defaultCount,
       dx = 960,
       dy = 500,
       r = 20, // blur radius
@@ -32,7 +37,7 @@ export default function() {
       var xi = (x(d, i, data) + o) >> k,
           yi = (y(d, i, data) + o) >> k;
       if (xi >= 0 && xi < n && yi >= 0 && yi < m) {
-        ++values0[xi + yi * n];
+        values0[xi + yi * n] += count(d);
       }
     });
 
@@ -94,6 +99,10 @@ export default function() {
 
   density.y = function(_) {
     return arguments.length ? (y = typeof _ === "function" ? _ : constant(+_), density) : y;
+  };
+
+  density.count = function(_) {
+    return arguments.length ? (count = typeof _ === "function" ? _ : constant(+_), density) : count;
   };
 
   density.size = function(_) {
