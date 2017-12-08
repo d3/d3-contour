@@ -1,5 +1,6 @@
 *.sublime-workspace
 .DS_Store
 build/
+img/
 node_modules
 npm-debug.log
