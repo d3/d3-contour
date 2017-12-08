@@ -1,6 +1,6 @@
 {
   "name": "d3-contour",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Compute contour polygons using marching squares.",
   "keywords": [
     "d3",
