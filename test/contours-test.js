@@ -55,6 +55,34 @@ tape("contours(values) returns the expected result for a simple polygon", functi
   test.end();
 });
 
+tape("contours(values).contour(value) returns the expected result for a simple polygon", function(test) {
+  var contours = d3.contours().size([10, 10]);
+  test.deepEqual(contours.contour([
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 1, 1, 1, 0, 0, 0, 0,
+    0, 0, 0, 1, 1, 1, 0, 0, 0, 0,
+    0, 0, 0, 1, 1, 1, 0, 0, 0, 0,
+    0, 0, 0, 1, 1, 1, 0, 0, 0, 0,
+    0, 0, 0, 1, 1, 1, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+  ], 0.5), {
+    "type": "MultiPolygon",
+    "value": 0.5,
+    "coordinates": [
+      [
+        [[6, 7.5], [6, 6.5], [6, 5.5], [6, 4.5], [6, 3.5], [5.5, 3], [4.5, 3],
+         [3.5, 3], [3, 3.5], [3, 4.5], [3, 5.5], [3, 6.5], [3, 7.5], [3.5, 8],
+         [4.5, 8], [5.5, 8], [6, 7.5]]
+      ]
+    ]
+  });
+  test.end();
+});
+
 tape("contours.smooth(false)(values) returns the expected result for a simple polygon", function(test) {
   var contours = d3.contours().smooth(false).size([10, 10]).thresholds([0.5]);
   test.deepEqual(contours([
