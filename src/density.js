@@ -12,9 +12,14 @@ function defaultY(d) {
   return d[1];
 }
 
+function defaultWeight() {
+  return 1;
+}
+
 export default function() {
   var x = defaultX,
       y = defaultY,
+      weight = defaultWeight,
       dx = 960,
       dy = 500,
       r = 20, // blur radius
@@ -30,9 +35,10 @@ export default function() {
 
     data.forEach(function(d, i, data) {
       var xi = (x(d, i, data) + o) >> k,
-          yi = (y(d, i, data) + o) >> k;
+          yi = (y(d, i, data) + o) >> k,
+          wi = weight(d, i, data);
       if (xi >= 0 && xi < n && yi >= 0 && yi < m) {
-        ++values0[xi + yi * n];
+        values0[xi + yi * n] += wi;
       }
     });
 
@@ -94,6 +100,10 @@ export default function() {
 
   density.y = function(_) {
     return arguments.length ? (y = typeof _ === "function" ? _ : constant(+_), density) : y;
+  };
+
+  density.weight = function(_) {
+    return arguments.length ? (weight = typeof _ === "function" ? _ : constant(+_), density) : weight;
   };
 
   density.size = function(_) {
