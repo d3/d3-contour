@@ -119,7 +119,7 @@ Constructs a new density estimator with the default settings.
 
 Estimates the density contours for the given array of *data*, returning an array of [GeoJSON](http://geojson.org/geojson-spec.html) [MultiPolygon](http://geojson.org/geojson-spec.html#multipolygon) [geometry objects](http://geojson.org/geojson-spec.html#geometry-objects). Each geometry object represents the area where the estimated number of points per square pixel is greater than or equal to the corresponding [threshold value](#density_thresholds); the threshold value for each geometry object is exposed as <i>geometry</i>.value. The returned geometry objects are typically passed to [d3.geoPath](https://github.com/d3/d3-geo/blob/master/README.md#geoPath) to display, using null or [d3.geoIdentity](https://github.com/d3/d3-geo/blob/master/README.md#geoIdentity) as the associated projection. See also [d3.contours](#contours).
 
-The *x*- and *y*-coordinate for each data point are computed using [*density*.x](#density_x) and [*density*.y](#density_y). The generated contours are only accurate within the estimator’s [defined size](#density_size).
+The *x*- and *y*-coordinate for each data point are computed using [*density*.x](#density_x) and [*density*.y](#density_y). In addition, [*density*.weight](#density_weight) indicates the relative contribution of each data point (default 1). The generated contours are only accurate within the estimator’s [defined size](#density_size).
 
 <a name="density_x" href="#density_x">#</a> <i>density</i>.<b>x</b>([<i>x</i>]) [<>](https://github.com/d3/d3-contour/blob/master/src/density.js "Source")
 
@@ -138,6 +138,16 @@ If *y* is specified, sets the *y*-coordinate accessor. If *y* is not specified, 
 ```js
 function y(d) {
   return d[1];
+}
+```
+
+<a name="density_weight" href="#density_weight">#</a> <i>density</i>.<b>weight</b>([<i>weight</i>]) [<>](https://github.com/d3/d3-contour/blob/master/src/density.js "Source")
+
+If *weight* is specified, sets the accessor for point weights. If *weight* is not specified, returns the current point weight accessor, which defaults to:
+
+```js
+function weight() {
+  return 1;
 }
 ```
 
