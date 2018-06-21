@@ -34,9 +34,9 @@ export default function() {
         values1 = new Float32Array(n * m);
 
     data.forEach(function(d, i, data) {
-      var xi = (x(d, i, data) + o) >> k,
-          yi = (y(d, i, data) + o) >> k,
-          wi = weight(d, i, data);
+      var xi = (+x(d, i, data) + o) >> k,
+          yi = (+y(d, i, data) + o) >> k,
+          wi = +weight(d, i, data);
       if (xi >= 0 && xi < n && yi >= 0 && yi < m) {
         values0[xi + yi * n] += wi;
       }
