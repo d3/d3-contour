@@ -187,8 +187,8 @@ cross-spawn@^6.0.5:
     which "^1.2.9"
 
 d3-array@^1.1.1:
-  version "1.2.3"
-  resolved "https://registry.yarnpkg.com/d3-array/-/d3-array-1.2.3.tgz#d705413d19a48fd82c570b4442170d6b9f5df794"
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/d3-array/-/d3-array-1.2.4.tgz#635ce4d5eea759f6f605863dbcfc30edc737f71f"
 
 debug@^3.1.0:
   version "3.1.0"
