@@ -2,7 +2,7 @@
 
 This library computes contour polygons by applying [marching squares](https://en.wikipedia.org/wiki/Marching_squares) to a rectangular array of numeric values. For example, here is Maungawhau’s topology (the classic `volcano` dataset and `terrain.colors` from R):
 
-[<img alt="Contour Plot" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/volcano.gif" width="420" height="295">](https://bl.ocks.org/mbostock/4241134)
+[<img alt="Volcano Contours" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/volcano.gif" width="420" height="295">](https://observablehq.com/@d3/volcano-contours)
 
 For each [threshold value](#contours_thresholds), the [contour generator](#_contours) constructs a GeoJSON MultiPolygon geometry object representing the area where the input values are greater than or equal to the threshold value. The geometry is in planar coordinates, where ⟨<i>i</i> + 0.5, <i>j</i> + 0.5⟩ corresponds to element <i>i</i> + <i>jn</i> in the input values array. Here is an example that loads a GeoTIFF of surface temperatures, and another that blurs a noisy monochrome PNG to produce smooth contours of cloud fraction:
 
@@ -15,8 +15,8 @@ Since the contour polygons are GeoJSON, you can transform and display them using
 
 Contour plots can also visualize continuous functions by sampling. Here is the Goldstein–Price function (a test function for global optimization) and a trippy animation of *sin*(*x* + *y*)*sin*(*x* - *y*):
 
-[<img alt="Contour Plot II" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/goldstein-price.png" width="420" height="219">](https://bl.ocks.org/mbostock/f48ff9c1af4d637c9a518727f5fdfef5)
-[<img alt="Contour Plot III" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/sin-cos.png" width="420" height="219">](https://bl.ocks.org/mbostock/bf2f5f02b62b5b3bb92ae1b59b53da36)
+[<img alt="Contours" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/goldstein-price.png" width="420" height="219">](https://observablehq.com/@d3/contours)
+[<img alt="Animated Contours" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/sin-cos.png" width="420" height="219">](https://observablehq.com/@d3/animated-contours)
 
 Contours can also show the [estimated density](#density-estimation) of point clouds, which is especially useful to avoid overplotting in large datasets. This library implements fast two-dimensional kernel density estimation; see [d3.contourDensity](#contourDensity). Here is a scatterplot showing the relationship between the idle duration and eruption duration for Old Faithful:
 
@@ -24,7 +24,7 @@ Contours can also show the [estimated density](#density-estimation) of point clo
 
 And here is a density contour plot showing the relationship between the weight and price of 53,940 diamonds:
 
-[<img alt="Density Contours" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/diamonds.png" width="420" height="420">](https://bl.ocks.org/mbostock/7f5f22524bd1d824dd53c535eda0187f)
+[<img alt="Density Contours" src="https://raw.githubusercontent.com/d3/d3-contour/master/img/diamonds.png" width="420" height="420">](https://observablehq.com/@d3/density-contours)
 
 ## Installing
 
@@ -56,8 +56,6 @@ function goldsteinPrice(x, y) {
 
 </script>
 ```
-
-[Try d3-contour in your browser.](https://tonicdev.com/npm/d3-contour)
 
 ## API Reference
 
