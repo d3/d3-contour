@@ -1,8 +1,8 @@
 import {max, range, tickStep} from "d3-array";
-import {slice} from "./array";
-import {blurX, blurY} from "./blur";
-import constant from "./constant";
-import contours from "./contours";
+import {slice} from "./array.js";
+import {blurX, blurY} from "./blur.js";
+import constant from "./constant.js";
+import contours from "./contours.js";
 
 function defaultX(d) {
   return d[0];

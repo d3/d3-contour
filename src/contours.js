@@ -1,10 +1,10 @@
 import {extent, thresholdSturges, tickStep, range} from "d3-array";
-import {slice} from "./array";
-import ascending from "./ascending";
-import area from "./area";
-import constant from "./constant";
-import contains from "./contains";
-import noop from "./noop";
+import {slice} from "./array.js";
+import ascending from "./ascending.js";
+import area from "./area.js";
+import constant from "./constant.js";
+import contains from "./contains.js";
+import noop from "./noop.js";
 
 var cases = [
   [],
