@@ -13,7 +13,6 @@ tape("contours(values) returns the expected result for an empty polygon", functi
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0
   ]), [
     {
@@ -36,7 +35,6 @@ tape("contours(values) returns the expected result for a simple polygon", functi
     0, 0, 0, 1, 1, 1, 0, 0, 0, 0,
     0, 0, 0, 1, 1, 1, 0, 0, 0, 0,
     0, 0, 0, 1, 1, 1, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0
   ]), [
@@ -67,7 +65,6 @@ tape("contours(values).contour(value) returns the expected result for a simple p
     0, 0, 0, 1, 1, 1, 0, 0, 0, 0,
     0, 0, 0, 1, 1, 1, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0
   ], 0.5), {
     "type": "MultiPolygon",
@@ -94,7 +91,6 @@ tape("contours.smooth(false)(values) returns the expected result for a simple po
     0, 0, 0, 1, 2, 1, 0, 0, 0, 0,
     0, 0, 0, 2, 2, 2, 0, 0, 0, 0,
     0, 0, 0, 2, 1, 2, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0
   ]), [
@@ -124,7 +120,6 @@ tape("contours(values) returns the expected result for a polygon with a hole", f
     0, 0, 0, 1, 0, 1, 0, 0, 0, 0,
     0, 0, 0, 1, 0, 1, 0, 0, 0, 0,
     0, 0, 0, 1, 1, 1, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0
   ]), [
@@ -157,7 +152,6 @@ tape("contours(values) returns the expected result for a multipolygon", function
     0, 0, 0, 1, 1, 0, 1, 0, 0, 0,
     0, 0, 0, 1, 1, 0, 1, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0
   ]), [
     {
@@ -188,7 +182,6 @@ tape("contours(values) returns the expected result for a multipolygon with holes
     0, 1, 1, 1, 0, 1, 1, 1, 0, 0,
     0, 1, 0, 1, 0, 1, 0, 1, 0, 0,
     0, 1, 1, 1, 0, 1, 1, 1, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
