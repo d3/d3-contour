@@ -206,3 +206,16 @@ tape("contours(values) returns the expected result for a multipolygon with holes
   ]);
   test.end();
 });
+
+tape("contours.size(…) validates the specified size", function(test) {
+  test.deepEqual(d3.contours().size([1, 2]).size(), [1, 2]);
+  test.deepEqual(d3.contours().size([0, 0]).size(), [0, 0]);
+  test.deepEqual(d3.contours().size([1.5, 2.5]).size(), [1, 2]);
+  try {
+    d3.contours().size([0, -1]);
+    test.fail();
+  } catch (error) {
+    test.equal(error.message, "invalid size");
+  }
+  test.end();
+});
