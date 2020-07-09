@@ -18,6 +18,7 @@ tape("contours(values) returns the expected result for an empty polygon", functi
     {
       "type": "MultiPolygon",
       "value": 0.5,
+      "area": 0,
       "coordinates": []
     }
   ]);
@@ -41,6 +42,7 @@ tape("contours(values) returns the expected result for a simple polygon", functi
     {
       "type": "MultiPolygon",
       "value": 0.5,
+      "area": 14.5,
       "coordinates": [
         [
           [[6, 7.5], [6, 6.5], [6, 5.5], [6, 4.5], [6, 3.5], [5.5, 3], [4.5, 3],
@@ -69,6 +71,7 @@ tape("contours(values).contour(value) returns the expected result for a simple p
   ], 0.5), {
     "type": "MultiPolygon",
     "value": 0.5,
+    "area": 14.5,
     "coordinates": [
       [
         [[6, 7.5], [6, 6.5], [6, 5.5], [6, 4.5], [6, 3.5], [5.5, 3], [4.5, 3],
@@ -97,6 +100,7 @@ tape("contours.smooth(false)(values) returns the expected result for a simple po
     {
       "type": "MultiPolygon",
       "value": 0.5,
+      "area": 14.5,
       "coordinates": [
         [
           [[6, 7.5], [6, 6.5], [6, 5.5], [6, 4.5], [6, 3.5], [5.5, 3], [4.5, 3],
@@ -126,6 +130,7 @@ tape("contours(values) returns the expected result for a polygon with a hole", f
     {
       "type": "MultiPolygon",
       "value": 0.5,
+      "area": 12,
       "coordinates": [
         [
           [[6, 7.5], [6, 6.5], [6, 5.5], [6, 4.5], [6, 3.5], [5.5, 3], [4.5, 3],
@@ -157,6 +162,7 @@ tape("contours(values) returns the expected result for a multipolygon", function
     {
       "type": "MultiPolygon",
       "value": 0.5,
+      "area": 14,
       "coordinates": [
         [
           [[5, 7.5], [5, 6.5], [5, 5.5], [5, 4.5], [5, 3.5], [4.5, 3], [3.5, 3],
@@ -190,6 +196,7 @@ tape("contours(values) returns the expected result for a multipolygon with holes
     {
       "type": "MultiPolygon",
       "value": 0.5,
+      "area": 16,
       "coordinates": [
         [
           [[4, 5.5], [4, 4.5], [4, 3.5], [3.5, 3], [2.5, 3], [1.5, 3], [1, 3.5],

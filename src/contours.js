@@ -52,12 +52,15 @@ export default function() {
   // Based on https://github.com/mbostock/shapefile/blob/v0.6.2/shp/polygon.js
   function contour(values, value) {
     var polygons = [],
-        holes = [];
+        holes = [],
+        a = 0;
 
     isorings(values, value, function(ring) {
       smooth(ring, values, value);
-      if (area(ring) > 0) polygons.push([ring]);
+      var ar = area(ring);
+      if (ar > 0) polygons.push([ring]);
       else holes.push(ring);
+      a += ar / 2;
     });
 
     holes.forEach(function(hole) {
@@ -72,6 +75,7 @@ export default function() {
     return {
       type: "MultiPolygon",
       value: value,
+      area: a,
       coordinates: polygons
     };
   }
