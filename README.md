@@ -42,7 +42,8 @@ for (var j = 0.5, k = 0; j < m; ++j) {
   }
 }
 
-// Compute the contour polygons at log-spaced intervals; returns an array of MultiPolygon.var contours = d3.contours()
+// Compute the contour polygons at log-spaced intervals; returns an array of MultiPolygon.
+var contours = d3.contours()
     .size([n, m])
     .thresholds(Array.from({ length: 19 }, (_, i) => Math.pow(2, i + 2)))
     (values);
