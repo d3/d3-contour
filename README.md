@@ -42,10 +42,9 @@ for (var j = 0.5, k = 0; j < m; ++j) {
   }
 }
 
-// Compute the contour polygons at log-spaced intervals; returns an array of MultiPolygon.
-var contours = d3.contours()
+// Compute the contour polygons at log-spaced intervals; returns an array of MultiPolygon.var contours = d3.contours()
     .size([n, m])
-    .thresholds(d3.range(2, 21).map(p => Math.pow(2, p)))
+    .thresholds(Array.from({ length: 19 }, (_, i) => Math.pow(2, i + 2)))
     (values);
 
 // See https://en.wikipedia.org/wiki/Test_functions_for_optimization
