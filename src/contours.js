@@ -189,18 +189,15 @@ export default function() {
    * @param {number} value The iso-value for this iso-ring.
    */
   function smoothLinearDual(ring, values, value) {
+    var point, x, y, x1, y1;
+
     // The first step in Dual Marching Squares smoothing is linear interpolation.
     smoothLinear(ring, values, value);
 
-    // Check if the first point is the same as the last point
-    var isCompleteRing = ring[0][0] === ring[ring.length - 1][0] &&
-      ring[0][1] === ring[ring.length - 1][1];
-
-    ring.forEach(function(point, i) {
-      var x = point[0],
-          y = point[1],
-          x1,
-          y1;
+    for (var i = 0; i < ring.length; i++) {
+      point = ring[i];
+      x = point[0];
+      y = point[1];
 
       if (i < ring.length - 1) {
         // Next point
@@ -210,12 +207,12 @@ export default function() {
         // Set the current point to the midpoint between it and the next point.
         point[0] = x + (x1 - x) / 2;
         point[1] = y + (y1 - y) / 2;
-      } else if (isCompleteRing) {
+      } else  {
         // This is the last point, complete the ring by matching the first point
         point[0] = ring[0][0];
         point[1] = ring[0][1];
       }
-    });
+    }
   }
 
   contours.contour = contour;

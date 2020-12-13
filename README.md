@@ -114,15 +114,15 @@ Additionally, the density of the source data impacts contour smoothness: the dif
   <thead>
     <tr>
       <th colspan="2" scope="colgroup"></th>
-      <th colspan="2" scope="colgroup">Low-density data</th>
-      <th colspan="2" scope="colgroup">High-density data</th>
+      <th colspan="2" scope="colgroup" style="text-align: center;">Low-density data</th>
+      <th colspan="2" scope="colgroup" style="text-align: center;">High-density data</th>
     </tr>
     <tr>
       <th colspan="2" scope="col">Smoothing method</th>
-      <th scope="col">Contour quality</th>
-      <th scope="col">Performance</th>
-      <th scope="col">Contour quality</th>
-      <th scope="col">Performance</th>
+      <th scope="col" style="text-align: center;">Contour<br/>quality</th>
+      <th scope="col" style="text-align: center;">Performance<br/>cost*</th>
+      <th scope="col" style="text-align: center;">Contour<br/>quality</th>
+      <th scope="col" style="text-align: center;">Performance<br/>cost*</th>
     </tr>
   </thead>
   <tbody>
@@ -130,28 +130,30 @@ Additionally, the density of the source data impacts contour smoothness: the dif
       <th scope="row">None</th>
       <th scope="row"><code>false</code></th>
       <td>Poor</td>
-      <td>Best</td>
+      <td>+0%</td>
       <td>Good</td>
-      <td>Best</td>
+      <td>+0%</td>
     </tr>
     <tr>
-      <th scope="row">Linear</th>
+      <th scope="row">Linear (Default)</th>
       <th scope="row"><code>true</code> or<br /><code>"linear"</code></th>
       <td>Good</td>
-      <td>Good</td>
+      <td>+2.40%</td>
       <td>Best</td>
-      <td>Poor</td>
+      <td>+1.55%</td>
     </tr>
     <tr>
-      <th scope="row">Dual Linear</th>
+      <th scope="row">Dual linear</th>
       <th scope="row"><code>"linearDual"</code></th>
       <td>Best</td>
-      <td>Good</td>
+      <td>+2.70%</td>
       <td>Best</td>
-      <td>Poor</td>
+      <td>+2.00%</td>
     </tr>
   </tbody>
 </table>
+
+\* Estimated performance cost based on 2 sample datasets.
 
 <a name="contours_thresholds" href="#contours_thresholds">#</a> <i>contours</i>.<b>thresholds</b>([<i>thresholds</i>]) · [Source](https://github.com/d3/d3-contour/blob/master/src/contours.js), [Examples](https://observablehq.com/@d3/volcano-contours)
 
