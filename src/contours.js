@@ -182,6 +182,39 @@ export default function() {
     });
   }
 
+  /**
+   * Applies smoothing to an iso-ring according to the Dual Marching Squares algorithm.
+   * @param {[number, number][]} ring The sorted list of (x,y) coordinates of points for a given iso-ring.
+   * @param {number[]} values The underlying grid values.
+   * @param {number} value The iso-value for this iso-ring.
+   */
+  function smoothLinearDual(ring, values, value) {
+    var point, x, y, x1, y1;
+
+    // The first step in Dual Marching Squares smoothing is linear interpolation.
+    smoothLinear(ring, values, value);
+
+    for (var i = 0; i < ring.length; i++) {
+      point = ring[i];
+      x = point[0];
+      y = point[1];
+
+      if (i < ring.length - 1) {
+        // Next point
+        x1 = ring[i + 1][0];
+        y1 = ring[i + 1][1];
+
+        // Set the current point to the midpoint between it and the next point.
+        point[0] = x + (x1 - x) / 2;
+        point[1] = y + (y1 - y) / 2;
+      } else  {
+        // This is the last point, complete the ring by matching the first point
+        point[0] = ring[0][0];
+        point[1] = ring[0][1];
+      }
+    }
+  }
+
   contours.contour = contour;
 
   contours.size = function(_) {
@@ -196,7 +229,7 @@ export default function() {
   };
 
   contours.smooth = function(_) {
-    return arguments.length ? (smooth = _ ? smoothLinear : noop, contours) : smooth === smoothLinear;
+    return arguments.length ? (smooth = _ === 'linearDual' ? smoothLinearDual : _ ? smoothLinear : noop, contours) : smooth === smoothLinear || smooth === smoothLinearDual;
   };
 
   return contours;

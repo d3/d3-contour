@@ -98,7 +98,62 @@ If *size* is specified, sets the expected size of the input *values* grid to the
 
 <a name="contours_smooth" href="#contours_smooth">#</a> <i>contours</i>.<b>smooth</b>([<i>smooth</i>]) · [Source](https://github.com/d3/d3-contour/blob/master/src/contours.js), [Examples](https://observablehq.com/@d3/contours-smooth)
 
-If *smooth* is specified, sets whether or not the generated contour polygons are smoothed using linear interpolation. If *smooth* is not specified, returns the current smoothing flag, which defaults to true.
+If *smooth* is specified, sets the smoothing method to use when generating the contour polygons. If *smooth* is not specified, returns the current smoothing method, which defaults to true.
+
+The available *smooth* options are:
+
+- `false`: Smoothing is disabled.
+- `true` or `"linear"` (Default): Linear interpolation smoothing, as described in the original [Marching Squares algorithm](https://en.wikipedia.org/wiki/Marching_squares).
+- `"linearDual"`: Dual linear interpolation smoothing, as described in the [Dual Marching Squares algorithm](https://ieeexplore.ieee.org/document/7459173).
+
+In general, the quality of each smoothing method is inversely proportional to its runtime performance.
+
+Additionally, the density of the source data impacts contour smoothness: the differences between the smoothing methods are more noticeable with low-density data than they are with high-density data. With _very_ high-density data, there is no discernible quality difference between the three methods.
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="2" scope="colgroup"></th>
+      <th colspan="2" scope="colgroup" style="text-align: center;">Low-density data</th>
+      <th colspan="2" scope="colgroup" style="text-align: center;">High-density data</th>
+    </tr>
+    <tr>
+      <th colspan="2" scope="col">Smoothing method</th>
+      <th scope="col" style="text-align: center;">Contour<br/>quality</th>
+      <th scope="col" style="text-align: center;">Performance<br/>cost*</th>
+      <th scope="col" style="text-align: center;">Contour<br/>quality</th>
+      <th scope="col" style="text-align: center;">Performance<br/>cost*</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">None</th>
+      <th scope="row"><code>false</code></th>
+      <td>Poor</td>
+      <td>+0%</td>
+      <td>Good</td>
+      <td>+0%</td>
+    </tr>
+    <tr>
+      <th scope="row">Linear (Default)</th>
+      <th scope="row"><code>true</code> or<br /><code>"linear"</code></th>
+      <td>Good</td>
+      <td>+2.40%</td>
+      <td>Best</td>
+      <td>+1.55%</td>
+    </tr>
+    <tr>
+      <th scope="row">Dual linear</th>
+      <th scope="row"><code>"linearDual"</code></th>
+      <td>Best</td>
+      <td>+2.70%</td>
+      <td>Best</td>
+      <td>+2.00%</td>
+    </tr>
+  </tbody>
+</table>
+
+\* Estimated performance cost based on 2 sample datasets.
 
 <a name="contours_thresholds" href="#contours_thresholds">#</a> <i>contours</i>.<b>thresholds</b>([<i>thresholds</i>]) · [Source](https://github.com/d3/d3-contour/blob/master/src/contours.js), [Examples](https://observablehq.com/@d3/volcano-contours)
 
