@@ -1,9 +1,9 @@
-var d3 = require("../"),
-    tape = require("tape");
+import assert from "assert";
+import * as d3 from "../src/index.js";
 
-tape("contours(values) returns the expected result for an empty polygon", function(test) {
-  var contours = d3.contours().size([10, 10]).thresholds([0.5]);
-  test.deepEqual(contours([
+it("contours(values) returns the expected result for an empty polygon", () => {
+  const contours = d3.contours().size([10, 10]).thresholds([0.5]);
+  assert.deepStrictEqual(contours([
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -21,12 +21,11 @@ tape("contours(values) returns the expected result for an empty polygon", functi
       "coordinates": []
     }
   ]);
-  test.end();
 });
 
-tape("contours(values) returns the expected result for a simple polygon", function(test) {
-  var contours = d3.contours().size([10, 10]).thresholds([0.5]);
-  test.deepEqual(contours([
+it("contours(values) returns the expected result for a simple polygon", () => {
+  const contours = d3.contours().size([10, 10]).thresholds([0.5]);
+  assert.deepStrictEqual(contours([
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -50,12 +49,11 @@ tape("contours(values) returns the expected result for a simple polygon", functi
       ]
     }
   ]);
-  test.end();
 });
 
-tape("contours(values).contour(value) returns the expected result for a simple polygon", function(test) {
-  var contours = d3.contours().size([10, 10]);
-  test.deepEqual(contours.contour([
+it("contours(values).contour(value) returns the expected result for a simple polygon", () => {
+  const contours = d3.contours().size([10, 10]);
+  assert.deepStrictEqual(contours.contour([
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -77,12 +75,11 @@ tape("contours(values).contour(value) returns the expected result for a simple p
       ]
     ]
   });
-  test.end();
 });
 
-tape("contours.smooth(false)(values) returns the expected result for a simple polygon", function(test) {
-  var contours = d3.contours().smooth(false).size([10, 10]).thresholds([0.5]);
-  test.deepEqual(contours([
+it("contours.smooth(false)(values) returns the expected result for a simple polygon", () => {
+  const contours = d3.contours().smooth(false).size([10, 10]).thresholds([0.5]);
+  assert.deepStrictEqual(contours([
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -106,12 +103,11 @@ tape("contours.smooth(false)(values) returns the expected result for a simple po
       ]
     }
   ]);
-  test.end();
 });
 
-tape("contours(values) returns the expected result for a polygon with a hole", function(test) {
-  var contours = d3.contours().size([10, 10]).thresholds([0.5]);
-  test.deepEqual(contours([
+it("contours(values) returns the expected result for a polygon with a hole", () => {
+  const contours = d3.contours().size([10, 10]).thresholds([0.5]);
+  assert.deepStrictEqual(contours([
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -137,12 +133,11 @@ tape("contours(values) returns the expected result for a polygon with a hole", f
       ]
     }
   ]);
-  test.end();
 });
 
-tape("contours(values) returns the expected result for a multipolygon", function(test) {
-  var contours = d3.contours().size([10, 10]).thresholds([0.5]);
-  test.deepEqual(contours([
+it("contours(values) returns the expected result for a multipolygon", () => {
+  const contours = d3.contours().size([10, 10]).thresholds([0.5]);
+  assert.deepStrictEqual(contours([
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -170,12 +165,11 @@ tape("contours(values) returns the expected result for a multipolygon", function
       ]
     }
   ]);
-  test.end();
 });
 
-tape("contours(values) returns the expected result for a multipolygon with holes", function(test) {
-  var contours = d3.contours().size([10, 10]).thresholds([0.5]);
-  test.deepEqual(contours([
+it("contours(values) returns the expected result for a multipolygon with holes", () => {
+  const contours = d3.contours().size([10, 10]).thresholds([0.5]);
+  assert.deepStrictEqual(contours([
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -204,18 +198,16 @@ tape("contours(values) returns the expected result for a multipolygon with holes
       ]
     }
   ]);
-  test.end();
 });
 
-tape("contours.size(…) validates the specified size", function(test) {
-  test.deepEqual(d3.contours().size([1, 2]).size(), [1, 2]);
-  test.deepEqual(d3.contours().size([0, 0]).size(), [0, 0]);
-  test.deepEqual(d3.contours().size([1.5, 2.5]).size(), [1, 2]);
+it("contours.size(…) validates the specified size", () => {
+  assert.deepStrictEqual(d3.contours().size([1, 2]).size(), [1, 2]);
+  assert.deepStrictEqual(d3.contours().size([0, 0]).size(), [0, 0]);
+  assert.deepStrictEqual(d3.contours().size([1.5, 2.5]).size(), [1, 2]);
   try {
     d3.contours().size([0, -1]);
-    test.fail();
+    assert.fail();
   } catch (error) {
-    test.equal(error.message, "invalid size");
+    assert.strictEqual(error.message, "invalid size");
   }
-  test.end();
 });

@@ -8,5 +8,8 @@
     "no-cond-assign": 0,
     "no-undef": 0,
     "no-unexpected-multiline": 0
+  },
+  "env": {
+    "mocha": true
   }
 }
