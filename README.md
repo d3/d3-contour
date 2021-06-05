@@ -28,23 +28,34 @@ And here is a density contour plot showing the relationship between the weight a
 
 ## Installing
 
-If you use NPM, `npm install d3-contour`. Otherwise, download the [latest release](https://github.com/d3/d3-contour/releases/latest). You can also load directly from [d3js.org](https://d3js.org), either as a [standalone library](https://d3js.org/d3-contour.v1.min.js) or as part of [D3](https://github.com/d3/d3). AMD, CommonJS, and vanilla environments are supported. In vanilla, a `d3` global is exported:
+If you use npm, `npm install d3-contour`. You can also download the [latest release on GitHub](https://github.com/d3/d3-contour/releases/latest). For vanilla HTML in modern browsers, import d3-contour from Skypack:
 
 ```html
-<script src="https://d3js.org/d3-array.v2.min.js"></script>
-<script src="https://d3js.org/d3-contour.v2.min.js"></script>
+<script type="module">
+
+import {contours} from "https://cdn.skypack.dev/d3-contour@3";
+
+const c = contours(values);
+
+</script>
+```
+
+For legacy environments, you can load d3-contour’s UMD bundle from an npm-based CDN such as jsDelivr; a `d3` global is exported:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/d3-contour@3"></script>
 <script>
 
 // Populate a grid of n×m values where -2 ≤ x ≤ 2 and -2 ≤ y ≤ 1.
-var n = 256, m = 256, values = new Array(n * m);
-for (var j = 0.5, k = 0; j < m; ++j) {
-  for (var i = 0.5; i < n; ++i, ++k) {
+const n = 256, m = 256, values = new Array(n * m);
+for (let j = 0.5, k = 0; j < m; ++j) {
+  for (let i = 0.5; i < n; ++i, ++k) {
     values[k] = goldsteinPrice(i / n * 4 - 2, 1 - j / m * 3);
   }
 }
 
 // Compute the contour polygons at log-spaced intervals; returns an array of MultiPolygon.
-var contours = d3.contours()
+const contours = d3.contours()
     .size([n, m])
     .thresholds(Array.from({ length: 19 }, (_, i) => Math.pow(2, i + 2)))
     (values);

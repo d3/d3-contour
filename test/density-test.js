@@ -1,15 +1,9 @@
-var d3 = require("../"),
-    tape = require("tape");
+import assert from "assert";
+import {contourDensity} from "../src/index.js";
 
-tape("density.size(…) validates the specified size", function(test) {
-  test.deepEqual(d3.contourDensity().size([1, 2]).size(), [1, 2]);
-  test.deepEqual(d3.contourDensity().size([0, 0]).size(), [0, 0]);
-  test.deepEqual(d3.contourDensity().size([1.5, 2.5]).size(), [1.5, 2.5]);
-  try {
-    d3.contourDensity().size([0, -1]);
-    test.fail();
-  } catch (error) {
-    test.equal(error.message, "invalid size");
-  }
-  test.end();
+it("density.size(…) validates the specified size", () => {
+  assert.deepStrictEqual(contourDensity().size([1, 2]).size(), [1, 2]);
+  assert.deepStrictEqual(contourDensity().size([0, 0]).size(), [0, 0]);
+  assert.deepStrictEqual(contourDensity().size([1.5, 2.5]).size(), [1.5, 2.5]);
+  assert.throws(() => void contourDensity().size([0, -1]), /invalid size/);
 });
