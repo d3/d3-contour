@@ -31,8 +31,8 @@ export default function() {
 
   function density(data) {
     var values0 = new Float32Array(n * m),
-        values1 = new Float32Array(n * m);
-    var pow2k = Math.pow(2, -k);
+        values1 = new Float32Array(n * m),
+        pow2k = Math.pow(2, -k);
 
     data.forEach(function(d, i, data) {
       var xi = (x(d, i, data) + o) * pow2k,
