@@ -43,6 +43,7 @@ const c = contours(values);
 For legacy environments, you can load d3-contour’s UMD bundle from an npm-based CDN such as jsDelivr; a `d3` global is exported:
 
 ```html
+<script src="https://cdn.jsdelivr.net/npm/d3-array@3"></script>
 <script src="https://cdn.jsdelivr.net/npm/d3-contour@3"></script>
 <script>
 
