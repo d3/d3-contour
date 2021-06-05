@@ -1,9 +1,9 @@
 import assert from "assert";
-import * as d3 from "../src/index.js";
+import {contours} from "../src/index.js";
 
 it("contours(values) returns the expected result for an empty polygon", () => {
-  const contours = d3.contours().size([10, 10]).thresholds([0.5]);
-  assert.deepStrictEqual(contours([
+  const c = contours().size([10, 10]).thresholds([0.5]);
+  assert.deepStrictEqual(c([
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -24,8 +24,8 @@ it("contours(values) returns the expected result for an empty polygon", () => {
 });
 
 it("contours(values) returns the expected result for a simple polygon", () => {
-  const contours = d3.contours().size([10, 10]).thresholds([0.5]);
-  assert.deepStrictEqual(contours([
+  const c = contours().size([10, 10]).thresholds([0.5]);
+  assert.deepStrictEqual(c([
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -52,8 +52,8 @@ it("contours(values) returns the expected result for a simple polygon", () => {
 });
 
 it("contours(values).contour(value) returns the expected result for a simple polygon", () => {
-  const contours = d3.contours().size([10, 10]);
-  assert.deepStrictEqual(contours.contour([
+  const c = contours().size([10, 10]);
+  assert.deepStrictEqual(c.contour([
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -78,8 +78,8 @@ it("contours(values).contour(value) returns the expected result for a simple pol
 });
 
 it("contours.smooth(false)(values) returns the expected result for a simple polygon", () => {
-  const contours = d3.contours().smooth(false).size([10, 10]).thresholds([0.5]);
-  assert.deepStrictEqual(contours([
+  const c = contours().smooth(false).size([10, 10]).thresholds([0.5]);
+  assert.deepStrictEqual(c([
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -106,8 +106,8 @@ it("contours.smooth(false)(values) returns the expected result for a simple poly
 });
 
 it("contours(values) returns the expected result for a polygon with a hole", () => {
-  const contours = d3.contours().size([10, 10]).thresholds([0.5]);
-  assert.deepStrictEqual(contours([
+  const c = contours().size([10, 10]).thresholds([0.5]);
+  assert.deepStrictEqual(c([
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -136,8 +136,8 @@ it("contours(values) returns the expected result for a polygon with a hole", () 
 });
 
 it("contours(values) returns the expected result for a multipolygon", () => {
-  const contours = d3.contours().size([10, 10]).thresholds([0.5]);
-  assert.deepStrictEqual(contours([
+  const c = contours().size([10, 10]).thresholds([0.5]);
+  assert.deepStrictEqual(c([
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -168,8 +168,8 @@ it("contours(values) returns the expected result for a multipolygon", () => {
 });
 
 it("contours(values) returns the expected result for a multipolygon with holes", () => {
-  const contours = d3.contours().size([10, 10]).thresholds([0.5]);
-  assert.deepStrictEqual(contours([
+  const c = contours().size([10, 10]).thresholds([0.5]);
+  assert.deepStrictEqual(c([
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -201,13 +201,8 @@ it("contours(values) returns the expected result for a multipolygon with holes",
 });
 
 it("contours.size(…) validates the specified size", () => {
-  assert.deepStrictEqual(d3.contours().size([1, 2]).size(), [1, 2]);
-  assert.deepStrictEqual(d3.contours().size([0, 0]).size(), [0, 0]);
-  assert.deepStrictEqual(d3.contours().size([1.5, 2.5]).size(), [1, 2]);
-  try {
-    d3.contours().size([0, -1]);
-    assert.fail();
-  } catch (error) {
-    assert.strictEqual(error.message, "invalid size");
-  }
+  assert.deepStrictEqual(contours().size([1, 2]).size(), [1, 2]);
+  assert.deepStrictEqual(contours().size([0, 0]).size(), [0, 0]);
+  assert.deepStrictEqual(contours().size([1.5, 2.5]).size(), [1, 2]);
+  assert.throws(() => void contours().size([0, -1]), /invalid size/);
 });
