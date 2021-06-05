@@ -32,9 +32,11 @@ If you use npm, `npm install d3-contour`. You can also download the [latest rele
 
 ```html
 <script type="module">
+
 import {contours} from "https://cdn.skypack.dev/d3-contour@3";
 
 const c = contours(values);
+
 </script>
 ```
 
@@ -65,9 +67,7 @@ function goldsteinPrice(x, y) {
 }
 
 </script>
-
 ```
-
 
 ## API Reference
 
