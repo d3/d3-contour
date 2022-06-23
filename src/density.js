@@ -61,7 +61,10 @@ export default function() {
     var tz = threshold(values0);
 
     // Convert number of thresholds into uniform thresholds.
-    if (!Array.isArray(tz)) {
+    if (Array.isArray(tz)) {
+      const pow4k = Math.pow(2, 2 * k);
+      tz = tz.map(d => d * pow4k);
+    } else {
       var stop = max(values0);
       tz = tickStep(0, stop, tz);
       tz = range(0, Math.floor(stop / tz) * tz, tz);
