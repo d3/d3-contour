@@ -1,8 +1,8 @@
-import {max, range, tickStep} from "d3-array";
+import {max, ticks} from "d3-array";
 import {slice} from "./array.js";
 import {blurX, blurY} from "./blur.js";
 import constant from "./constant.js";
-import contours from "./contours.js";
+import Contours from "./contours.js";
 
 function defaultX(d) {
   return d[0];
@@ -29,7 +29,7 @@ export default function() {
       m = (dy + o * 2) >> k, // grid height
       threshold = constant(20);
 
-  function density(data) {
+  function grid(data) {
     var values0 = new Float32Array(n * m),
         values1 = new Float32Array(n * m),
         pow2k = Math.pow(2, -k);
@@ -58,28 +58,41 @@ export default function() {
     blurX({width: n, height: m, data: values0}, {width: n, height: m, data: values1}, r >> k);
     blurY({width: n, height: m, data: values1}, {width: n, height: m, data: values0}, r >> k);
 
-    var tz = threshold(values0);
-
-    // Convert number of thresholds into uniform thresholds.
-    if (Array.isArray(tz)) {
-      const pow4k = Math.pow(2, 2 * k);
-      tz = tz.map(d => d * pow4k);
-    } else {
-      var stop = max(values0);
-      tz = tickStep(0, stop, tz);
-      tz = range(0, Math.floor(stop / tz) * tz, tz);
-      tz.shift();
-    }
-
-    return contours()
-        .thresholds(tz)
-        .size([n, m])
-      (values0)
-        .map(transform);
+    return values0;
   }
 
+  function density(data) {
+    var values = grid(data),
+        tz = threshold(values),
+        pow4k = Math.pow(2, 2 * k);
+
+    // Convert number of thresholds into uniform thresholds.
+    if (!Array.isArray(tz)) {
+      tz = ticks(Number.MIN_VALUE, max(values) / pow4k, tz);
+    }
+
+    return Contours()
+        .size([n, m])
+        .thresholds(tz.map(d => d * pow4k))
+      (values)
+        .map((c, i) => (c.value = +tz[i], transform(c)));
+  }
+
+  density.contours = function(data) {
+    var values = grid(data),
+        contours = Contours().size([n, m]),
+        pow4k = Math.pow(2, 2 * k),
+        contour = value => {
+          value = +value;
+          var c = transform(contours.contour(values, value * pow4k));
+          c.value = value; // preserve exact threshold value
+          return c;
+        };
+    Object.defineProperty(contour, "max", {get: () => max(values) / pow4k});
+    return contour;
+  };
+
   function transform(geometry) {
-    geometry.value *= Math.pow(2, -2 * k); // Density in points per square pixel.
     geometry.coordinates.forEach(transformPolygon);
     return geometry;
   }

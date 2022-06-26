@@ -181,3 +181,7 @@ If a *count* is specified instead of an array of *thresholds*, then approximatel
 <a name="density_bandwidth" href="#density_bandwidth">#</a> <i>density</i>.<b>bandwidth</b>([<i>bandwidth</i>]) · [Source](https://github.com/d3/d3-contour/blob/master/src/density.js), [Examples](https://observablehq.com/@d3/density-contours)
 
 If *bandwidth* is specified, sets the bandwidth (the standard deviation) of the Gaussian kernel and returns the estimate. If *bandwidth* is not specified, returns the current bandwidth, which defaults to 20.4939…. The specified *bandwidth* is currently rounded to the nearest supported value by this implementation, and must be nonnegative.
+
+<a name="density_contours" href="#density_contours">#</a> <i>density</i>.<b>contours</b>(<i>data</i>) · [Source](https://github.com/d3/d3-contour/blob/master/src/density.js), [Examples](https://observablehq.com/@d3/density-contours)
+
+Return a *contour*(*value*) function that can be used to compute an arbitrary contour on the given data without needing to recompute the underlying grid. The returned *contour* function also exposes a *contour*.max value which represents the maximum density of the grid.

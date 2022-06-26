@@ -1,7 +1,12 @@
 import assert from "assert";
+import {extent, ticks} from "d3-array";
+import {autoType} from "d3-dsv";
+import {tsv} from "d3-fetch";
 import {polygonCentroid} from "d3-polygon";
+import {scaleLinear} from "d3-scale";
 import {contourDensity} from "../src/index.js";
 import {assertInDelta} from "./asserts.js";
+import it from "./jsdom.js";
 
 it("density.size(…) validates the specified size", () => {
   assert.deepStrictEqual(contourDensity().size([1, 2]).size(), [1, 2]);
@@ -46,4 +51,62 @@ it("contourDensity.thresholds(values[])(data) returns contours for the given val
   const c2 = c.thresholds(values1)(points);
   const values2 = c2.map(d => d.value);
   assert.deepStrictEqual(values1, values2);
+});
+
+it("contourDensity(data) returns nice default thresholds", async () => {
+  const faithful = await tsv("data/faithful.tsv", autoType);
+
+  const width = 960,
+        height = 500,
+        marginTop = 20,
+        marginRight = 30,
+        marginBottom = 30,
+        marginLeft = 40;
+
+  const x = scaleLinear()
+      .domain(extent(faithful, d => d.waiting)).nice()
+      .rangeRound([marginLeft, width - marginRight]);
+
+  const y = scaleLinear()
+      .domain(extent(faithful, d => d.eruptions)).nice()
+      .rangeRound([height - marginBottom, marginTop]);
+
+  const contour = contourDensity()
+      .x(d => x(d.waiting))
+      .y(d => y(d.eruptions))
+      .size([width, height])
+      .bandwidth(30)
+    (faithful);
+
+  assert.deepStrictEqual(contour.map(c => c.value), ticks(0.0002, 0.006, 30));
+});
+
+it("contourDensity.contours(data) preserves the specified threshold exactly", async () => {
+  const faithful = await tsv("data/faithful.tsv", autoType);
+
+  const width = 960,
+        height = 500,
+        marginTop = 20,
+        marginRight = 30,
+        marginBottom = 30,
+        marginLeft = 40;
+
+  const x = scaleLinear()
+      .domain(extent(faithful, d => d.waiting)).nice()
+      .rangeRound([marginLeft, width - marginRight]);
+
+  const y = scaleLinear()
+      .domain(extent(faithful, d => d.eruptions)).nice()
+      .rangeRound([height - marginBottom, marginTop]);
+
+  const contour = contourDensity()
+      .x(d => x(d.waiting))
+      .y(d => y(d.eruptions))
+      .size([width, height])
+      .bandwidth(30)
+    .contours(faithful);
+
+  for (const value of ticks(0.0002, 0.006, 30)) {
+    assert.strictEqual(contour(value).value, value);
+  }
 });
