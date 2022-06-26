@@ -184,4 +184,4 @@ If *bandwidth* is specified, sets the bandwidth (the standard deviation) of the 
 
 <a name="density_contours" href="#density_contours">#</a> <i>density</i>.<b>contours</b>(<i>data</i>) · [Source](https://github.com/d3/d3-contour/blob/master/src/density.js), [Examples](https://observablehq.com/@d3/density-contours)
 
-Return a contour(*value*) function that can be used to compute arbitrary contours on the given data without needing to recompute the underlying grid. The returned *contour* function also exposes a *contour*.max value which represents the maximum density of the grid.
+Return a *contour*(*value*) function that can be used to compute an arbitrary contour on the given data without needing to recompute the underlying grid. The returned *contour* function also exposes a *contour*.max value which represents the maximum density of the grid.
