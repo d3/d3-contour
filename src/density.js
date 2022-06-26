@@ -75,7 +75,7 @@ export default function() {
         .size([n, m])
         .thresholds(tz.map(d => d * pow4k))
       (values)
-        .map((c, i) => (c.value = tz[i], transform(c)));
+        .map((c, i) => (c.value = +tz[i], transform(c)));
   }
 
   density.contours = function(data) {
