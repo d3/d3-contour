@@ -36,7 +36,7 @@
   },
   "sideEffects": false,
   "dependencies": {
-    "d3-array": "2 - 3"
+    "d3-array": "d3/d3-array#95e1f3e375d999bae44f42c74e08c4056e75afb4"
   },
   "devDependencies": {
     "d3-axis": "3",

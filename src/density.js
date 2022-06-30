@@ -1,25 +1,12 @@
-import {max, ticks} from "d3-array";
-import {slice} from "./array.js";
-import {blurX, blurY} from "./blur.js";
+import {blur, max, ticks} from "d3-array";
 import constant from "./constant.js";
 import Contours from "./contours.js";
-
-function defaultX(d) {
-  return d[0];
-}
-
-function defaultY(d) {
-  return d[1];
-}
-
-function defaultWeight() {
-  return 1;
-}
+import {slice} from "./array.js";
 
 export default function() {
-  var x = defaultX,
-      y = defaultY,
-      weight = defaultWeight,
+  let x = d => d[0],
+      y = d => d[1],
+      weight = constant(1),
       dx = 960,
       dy = 500,
       r = 20, // blur radius
@@ -30,35 +17,27 @@ export default function() {
       threshold = constant(20);
 
   function grid(data) {
-    var values0 = new Float32Array(n * m),
-        values1 = new Float32Array(n * m),
+    const l = data.length;
+    const values = new Float32Array(n * m),
         pow2k = Math.pow(2, -k);
 
-    data.forEach(function(d, i, data) {
-      var xi = (x(d, i, data) + o) * pow2k,
-          yi = (y(d, i, data) + o) * pow2k,
-          wi = +weight(d, i, data);
+    for (let i = 0; i < l; ++i) {
+      const d = data[i];
+      const xi = (x(d, i, data) + o) * pow2k;
+      const yi = (y(d, i, data) + o) * pow2k;
+      const wi = +weight(d, i, data);
       if (xi >= 0 && xi < n && yi >= 0 && yi < m) {
-        var x0 = Math.floor(xi),
-            y0 = Math.floor(yi),
-            xt = xi - x0 - 0.5,
-            yt = yi - y0 - 0.5;
-        values0[x0 + y0 * n] += (1 - xt) * (1 - yt) * wi;
-        values0[x0 + 1 + y0 * n] += xt * (1 - yt) * wi;
-        values0[x0 + 1 + (y0 + 1) * n] += xt * yt * wi;
-        values0[x0 + (y0 + 1) * n] += (1 - xt) * yt * wi;
+        const x0 = Math.floor(xi);
+        const y0 = Math.floor(yi);
+        const xt = xi - x0 - 0.5;
+        const yt = yi - y0 - 0.5;
+        values[x0 + y0 * n] += (1 - xt) * (1 - yt) * wi;
+        values[x0 + 1 + y0 * n] += xt * (1 - yt) * wi;
+        values[x0 + 1 + (y0 + 1) * n] += xt * yt * wi;
+        values[x0 + (y0 + 1) * n] += (1 - xt) * yt * wi;
       }
-    });
-
-    // TODO Optimize.
-    blurX({width: n, height: m, data: values0}, {width: n, height: m, data: values1}, r >> k);
-    blurY({width: n, height: m, data: values1}, {width: n, height: m, data: values0}, r >> k);
-    blurX({width: n, height: m, data: values0}, {width: n, height: m, data: values1}, r >> k);
-    blurY({width: n, height: m, data: values1}, {width: n, height: m, data: values0}, r >> k);
-    blurX({width: n, height: m, data: values0}, {width: n, height: m, data: values1}, r >> k);
-    blurY({width: n, height: m, data: values1}, {width: n, height: m, data: values0}, r >> k);
-
-    return values0;
+    }
+    return blur().radius(r * pow2k * 0.95).width(n)(values);
   }
 
   function density(data) {
@@ -150,7 +129,7 @@ export default function() {
   density.bandwidth = function(_) {
     if (!arguments.length) return Math.sqrt(r * (r + 1));
     if (!((_ = +_) >= 0)) throw new Error("invalid bandwidth");
-    return r = Math.round((Math.sqrt(4 * _ * _ + 1) - 1) / 2), resize();
+    return r = (Math.sqrt(4 * _ * _ + 1) - 1) / 2, resize();
   };
 
   return density;
