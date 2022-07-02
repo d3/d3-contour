@@ -1,4 +1,4 @@
-import {blur, max, ticks} from "d3-array";
+import {blur2, max, ticks} from "d3-array";
 import constant from "./constant.js";
 import Contours from "./contours.js";
 import {slice} from "./array.js";
@@ -37,7 +37,8 @@ export default function() {
         values[x0 + (y0 + 1) * n] += (1 - xt) * yt * wi;
       }
     }
-    return blur().radius(r * pow2k * 0.95).width(n)(values);
+    blur2({data: values, width: n, height: m}, r * pow2k);
+    return values;
   }
 
   function density(data) {

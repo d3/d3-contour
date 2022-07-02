@@ -382,9 +382,9 @@ cssstyle@^2.3.0:
   dependencies:
     cssom "~0.3.6"
 
-"d3-array@2 - 3", "d3-array@2.10.0 - 3", "d3-array@2.5.0 - 3", d3-array@d3/d3-array#95e1f3e375d999bae44f42c74e08c4056e75afb4:
+"d3-array@2 - 3", "d3-array@2.10.0 - 3", "d3-array@2.5.0 - 3", d3-array@d3/d3-array#5bbef8f7c03ce138d6bdaa4da163b9221b843e31:
   version "3.1.6"
-  resolved "https://codeload.github.com/d3/d3-array/tar.gz/95e1f3e375d999bae44f42c74e08c4056e75afb4"
+  resolved "https://codeload.github.com/d3/d3-array/tar.gz/5bbef8f7c03ce138d6bdaa4da163b9221b843e31"
   dependencies:
     internmap "1 - 2"
 
