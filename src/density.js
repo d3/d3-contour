@@ -1,12 +1,24 @@
 import {blur2, max, ticks} from "d3-array";
+import {slice} from "./array.js";
 import constant from "./constant.js";
 import Contours from "./contours.js";
-import {slice} from "./array.js";
+
+function defaultX(d) {
+  return d[0];
+}
+
+function defaultY(d) {
+  return d[1];
+}
+
+function defaultWeight() {
+  return 1;
+}
 
 export default function() {
-  let x = d => d[0],
-      y = d => d[1],
-      weight = constant(1),
+  var x = defaultX,
+      y = defaultY,
+      weight = defaultWeight,
       dx = 960,
       dy = 500,
       r = 20, // blur radius
@@ -17,26 +29,26 @@ export default function() {
       threshold = constant(20);
 
   function grid(data) {
-    const l = data.length;
-    const values = new Float32Array(n * m),
-        pow2k = Math.pow(2, -k);
+    var values = new Float32Array(n * m),
+        pow2k = Math.pow(2, -k),
+        i = -1;
 
-    for (let i = 0; i < l; ++i) {
-      const d = data[i];
-      const xi = (x(d, i, data) + o) * pow2k;
-      const yi = (y(d, i, data) + o) * pow2k;
-      const wi = +weight(d, i, data);
+    for (const d of data) {
+      var xi = (x(d, ++i, data) + o) * pow2k,
+          yi = (y(d, i, data) + o) * pow2k,
+          wi = +weight(d, i, data);
       if (xi >= 0 && xi < n && yi >= 0 && yi < m) {
-        const x0 = Math.floor(xi);
-        const y0 = Math.floor(yi);
-        const xt = xi - x0 - 0.5;
-        const yt = yi - y0 - 0.5;
+        var x0 = Math.floor(xi),
+            y0 = Math.floor(yi),
+            xt = xi - x0 - 0.5,
+            yt = yi - y0 - 0.5;
         values[x0 + y0 * n] += (1 - xt) * (1 - yt) * wi;
         values[x0 + 1 + y0 * n] += xt * (1 - yt) * wi;
         values[x0 + 1 + (y0 + 1) * n] += xt * yt * wi;
         values[x0 + (y0 + 1) * n] += (1 - xt) * yt * wi;
       }
     }
+
     blur2({data: values, width: n, height: m}, r * pow2k);
     return values;
   }
