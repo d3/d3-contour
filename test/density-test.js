@@ -78,7 +78,7 @@ it("contourDensity(data) returns nice default thresholds", async () => {
       .bandwidth(30)
     (faithful);
 
-  assert.deepStrictEqual(contour.map(c => c.value), ticks(0.0002, 0.006, 30));
+  assert.deepStrictEqual(contour.map(c => c.value), ticks(0.0002, 0.0059, 30));
 });
 
 it("contourDensity.contours(data) preserves the specified threshold exactly", async () => {
