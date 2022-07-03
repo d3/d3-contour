@@ -33,7 +33,7 @@ If you use npm, `npm install d3-contour`. You can also download the [latest rele
 ```html
 <script type="module">
 
-import {contours} from "https://cdn.skypack.dev/d3-contour@3";
+import {contours} from "https://cdn.skypack.dev/d3-contour@4";
 
 const c = contours(values);
 
@@ -44,7 +44,7 @@ For legacy environments, you can load d3-contour’s UMD bundle from an npm-base
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/d3-array@3"></script>
-<script src="https://cdn.jsdelivr.net/npm/d3-contour@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-contour@4"></script>
 <script>
 
 // Populate a grid of n×m values where -2 ≤ x ≤ 2 and -2 ≤ y ≤ 1.
