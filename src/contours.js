@@ -36,7 +36,7 @@ export default function() {
 
     // Convert number of thresholds into uniform thresholds.
     if (!Array.isArray(tz)) {
-      const e = extent(values), ts = tickStep(e[0], e[1], tz);
+      const e = extent(values, d => isFinite(d) ? d : null), ts = tickStep(e[0], e[1], tz);
       tz = ticks(Math.floor(e[0] / ts) * ts, Math.floor(e[1] / ts - 1) * ts, tz);
     } else {
       tz = tz.slice().sort(ascending);
@@ -80,12 +80,17 @@ export default function() {
         fragmentByEnd = new Array,
         x, y, t0, t1, t2, t3;
 
+    function above(index) {
+      const x = values[index];
+      return x == null || isNaN(x) ? false : x >= value;
+    }
+
     // Special case for the first row (y = -1, t2 = t3 = 0).
     x = y = -1;
-    t1 = values[0] >= value;
+    t1 = above(0);
     cases[t1 << 1].forEach(stitch);
     while (++x < dx - 1) {
-      t0 = t1, t1 = values[x + 1] >= value;
+      t0 = t1, t1 = above(x + 1);
       cases[t0 | t1 << 1].forEach(stitch);
     }
     cases[t1 << 0].forEach(stitch);
@@ -93,12 +98,12 @@ export default function() {
     // General case for the intermediate rows.
     while (++y < dy - 1) {
       x = -1;
-      t1 = values[y * dx + dx] >= value;
-      t2 = values[y * dx] >= value;
+      t1 = above(y * dx + dx);
+      t2 = above(y * dx);
       cases[t1 << 1 | t2 << 2].forEach(stitch);
       while (++x < dx - 1) {
-        t0 = t1, t1 = values[y * dx + dx + x + 1] >= value;
-        t3 = t2, t2 = values[y * dx + x + 1] >= value;
+        t0 = t1, t1 = above(y * dx + dx + x + 1);
+        t3 = t2, t2 = above(y * dx + x + 1);
         cases[t0 | t1 << 1 | t2 << 2 | t3 << 3].forEach(stitch);
       }
       cases[t1 | t2 << 3].forEach(stitch);
@@ -109,7 +114,7 @@ export default function() {
     t2 = values[y * dx] >= value;
     cases[t2 << 2].forEach(stitch);
     while (++x < dx - 1) {
-      t3 = t2, t2 = values[y * dx + x + 1] >= value;
+      t3 = t2, t2 = above(y * dx + x + 1);
       cases[t2 << 2 | t3 << 3].forEach(stitch);
     }
     cases[t2 << 3].forEach(stitch);
@@ -167,16 +172,21 @@ export default function() {
           xt = x | 0,
           yt = y | 0,
           v0,
-          v1 = values[yt * dx + xt];
-      if (x > 0 && x < dx && xt === x) {
-        v0 = values[yt * dx + xt - 1];
+          v1 = low(values[yt * dx + xt]);
+        if (x > 0 && x < dx && xt === x) {
+        v0 = low(values[yt * dx + xt - 1]);
+        if (v0 == null || isNaN(v0) || !isFinite(v0)) v0 = -1e52;
         point[0] = x + (value - v0) / (v1 - v0) - 0.5;
       }
       if (y > 0 && y < dy && yt === y) {
-        v0 = values[(yt - 1) * dx + xt];
+        v0 = low(values[(yt - 1) * dx + xt]);
         point[1] = y + (value - v0) / (v1 - v0) - 0.5;
       }
     });
+  }
+
+  function low(v) {
+    return v == null || isNaN(v) || !isFinite(v) ? -1e52 : v;
   }
 
   contours.contour = contour;
