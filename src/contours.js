@@ -6,7 +6,7 @@ import constant from "./constant.js";
 import contains from "./contains.js";
 import noop from "./noop.js";
 
-var cases = [
+const cases = [
   [],
   [[[1.0, 1.5], [0.5, 1.0]]],
   [[[1.5, 1.0], [1.0, 1.5]]],
@@ -26,13 +26,13 @@ var cases = [
 ];
 
 export default function() {
-  var dx = 1,
+  let dx = 1,
       dy = 1,
       threshold = thresholdSturges,
       smooth = smoothLinear;
 
   function contours(values) {
-    var tz = threshold(values);
+    let tz = threshold(values);
 
     // Convert number of thresholds into uniform thresholds.
     if (!Array.isArray(tz)) {
@@ -48,17 +48,20 @@ export default function() {
   // Accumulate, smooth contour rings, assign holes to exterior rings.
   // Based on https://github.com/mbostock/shapefile/blob/v0.6.2/shp/polygon.js
   function contour(values, value) {
-    var polygons = [],
+    const v = value === null ? NaN : +value;
+    if (isNaN(v)) throw new Error(`invalid value: ${value}`);
+
+    const polygons = [],
         holes = [];
 
-    isorings(values, value, function(ring) {
-      smooth(ring, values, value);
+    isorings(values, v, function(ring) {
+      smooth(ring, values, v);
       if (area(ring) > 0) polygons.push([ring]);
       else holes.push(ring);
     });
 
     holes.forEach(function(hole) {
-      for (var i = 0, n = polygons.length, polygon; i < n; ++i) {
+      for (let i = 0, n = polygons.length, polygon; i < n; ++i) {
         if (contains((polygon = polygons[i])[0], hole) !== -1) {
           polygon.push(hole);
           return;
@@ -76,9 +79,9 @@ export default function() {
   // Marching squares with isolines stitched into rings.
   // Based on https://github.com/topojson/topojson-client/blob/v3.0.0/src/stitch.js
   function isorings(values, value, callback) {
-    var fragmentByStart = new Array,
-        fragmentByEnd = new Array,
-        x, y, t0, t1, t2, t3;
+    const fragmentByStart = new Array,
+        fragmentByEnd = new Array;
+    let x, y, t0, t1, t2, t3;
 
     function above(index) {
       const x = values[index];
@@ -120,11 +123,11 @@ export default function() {
     cases[t2 << 3].forEach(stitch);
 
     function stitch(line) {
-      var start = [line[0][0] + x, line[0][1] + y],
+      const start = [line[0][0] + x, line[0][1] + y],
           end = [line[1][0] + x, line[1][1] + y],
           startIndex = index(start),
-          endIndex = index(end),
-          f, g;
+          endIndex = index(end);
+      let f, g;
       if (f = fragmentByEnd[startIndex]) {
         if (g = fragmentByStart[endIndex]) {
           delete fragmentByEnd[f.end];
@@ -167,33 +170,37 @@ export default function() {
 
   function smoothLinear(ring, values, value) {
     ring.forEach(function(point) {
-      var x = point[0],
+      const x = point[0],
           y = point[1],
           xt = x | 0,
           yt = y | 0,
-          v0,
-          v1 = low(values[yt * dx + xt]);
-        if (x > 0 && x < dx && xt === x) {
-        v0 = low(values[yt * dx + xt - 1]);
-        if (v0 == null || isNaN(v0) || !isFinite(v0)) v0 = -1e52;
-        point[0] = x + (value - v0) / (v1 - v0) - 0.5;
+          v1 = valid(values[yt * dx + xt]);
+      if (x > 0 && x < dx && xt === x) {
+        const d = gap(valid(values[yt * dx + xt - 1]), v1, value);
+        point[0] = isNaN(d) ? x : x + d - 0.5;
       }
       if (y > 0 && y < dy && yt === y) {
-        v0 = low(values[(yt - 1) * dx + xt]);
-        point[1] = y + (value - v0) / (v1 - v0) - 0.5;
+        const d = gap(valid(values[(yt - 1) * dx + xt]), v1, value);
+        point[1] = isNaN(d) ? y : y + d - 0.5;
       }
     });
   }
 
-  function low(v) {
-    return v == null || isNaN(v) || !isFinite(v) ? -1e52 : v;
+  function valid(v) {
+    return v === null || isNaN(v = +v) ? -Infinity : v;
+  }
+
+  function gap(v0, v1, value) {
+    const a = value - v0;
+    const b = v1 - v0;
+    return isFinite(a) || isFinite(b) ? a / b : Math.sign(a) / Math.sign(b);
   }
 
   contours.contour = contour;
 
   contours.size = function(_) {
     if (!arguments.length) return [dx, dy];
-    var _0 = Math.floor(_[0]), _1 = Math.floor(_[1]);
+    const _0 = Math.floor(_[0]), _1 = Math.floor(_[1]);
     if (!(_0 >= 0 && _1 >= 0)) throw new Error("invalid size");
     return dx = _0, dy = _1, contours;
   };
