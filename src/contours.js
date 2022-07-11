@@ -82,7 +82,7 @@ export default function() {
 
     function above(index) {
       const x = values[index];
-      return x == null || isNaN(x) ? false : x >= value;
+      return x === null ? false : +x >= value;
     }
 
     // Special case for the first row (y = -1, t2 = t3 = 0).
