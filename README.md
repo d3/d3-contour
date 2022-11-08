@@ -120,7 +120,7 @@ Thresholds are defined as an array of values [*x0*, *x1*, …]. The first [gener
 
 If a *count* is specified instead of an array of *thresholds*, then the input values’ [extent](https://github.com/d3/d3-array/blob/main/README.md#extent) will be uniformly divided into approximately *count* bins; see [d3.ticks](https://github.com/d3/d3-array/blob/main/README.md#ticks).
 
-## Density Estimation
+### Density Estimation
 
 <a name="contourDensity" href="#contourDensity">#</a> d3.<b>contourDensity</b>() · [Source](https://github.com/d3/d3-contour/blob/main/src/density.js), [Examples](https://observablehq.com/@d3/density-contours)
 
