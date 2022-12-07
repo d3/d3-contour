@@ -37,7 +37,7 @@ export default function() {
       var xi = (x(d, ++i, data) + o) * pow2k,
           yi = (y(d, i, data) + o) * pow2k,
           wi = +weight(d, i, data);
-      if (xi >= 0 && xi < n && yi >= 0 && yi < m) {
+      if (wi && xi >= 0 && xi < n && yi >= 0 && yi < m) {
         var x0 = Math.floor(xi),
             y0 = Math.floor(yi),
             xt = xi - x0 - 0.5,

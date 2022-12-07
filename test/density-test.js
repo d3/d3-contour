@@ -43,6 +43,12 @@ it("contourDensity.thresholds(values[])(data) returns contours for the given val
   assert.deepStrictEqual(values1, values2);
 });
 
+it("contourDensity.weight(…) accepts NaN weights", () => {
+  const points = [[1, 0, 1], [0, 1, -2], [1, 1, NaN]];
+  const c = contourDensity().weight(d => d[2])(points);
+  assert.strictEqual(c.length, 24);
+});
+
 it("contourDensity.thresholds(values[])(data) returns contours for the given values at a different cellSize", () => {
   const points = [[1, 0], [0, 1], [1, 1]];
   const c = contourDensity().cellSize(16);
