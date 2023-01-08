@@ -48,7 +48,7 @@ export default function() {
   // Accumulate, smooth contour rings, assign holes to exterior rings.
   // Based on https://github.com/mbostock/shapefile/blob/v0.6.2/shp/polygon.js
   function contour(values, value) {
-    const v = value === null ? NaN : +value;
+    const v = value == null ? NaN : +value;
     if (isNaN(v)) throw new Error(`invalid value: ${value}`);
 
     var polygons = [],
@@ -85,7 +85,7 @@ export default function() {
 
     function above(index) {
       const x = values[index];
-      return x === null ? false : +x >= value;
+      return x == null ? false : +x >= value;
     }
 
     // Special case for the first row (y = -1, t2 = t3 = 0).
@@ -207,7 +207,7 @@ export default function() {
 }
 
 function valid(v) {
-  return v === null || isNaN(v = +v) ? -Infinity : v;
+  return v == null || isNaN(v = +v) ? -Infinity : v;
 }
 
 function gap(v0, v1, value) {
