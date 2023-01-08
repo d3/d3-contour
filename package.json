@@ -1,6 +1,6 @@
 {
   "name": "d3-contour",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "Compute contour polygons using marching squares.",
   "homepage": "https://d3js.org/d3-contour/",
   "repository": {
