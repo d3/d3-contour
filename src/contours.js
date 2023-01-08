@@ -205,7 +205,7 @@ function finite(x) {
 }
 
 // Is the (possibly invalid) x greater than or equal to the (known valid) value?
-// Treat any invalid value as negative infinity.
+// Treat any invalid value as below negative infinity.
 function above(x, value) {
   return x == null ? false : +x >= value;
 }
