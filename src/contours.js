@@ -6,7 +6,7 @@ import constant from "./constant.js";
 import contains from "./contains.js";
 import noop from "./noop.js";
 
-const cases = [
+var cases = [
   [],
   [[[1.0, 1.5], [0.5, 1.0]]],
   [[[1.5, 1.0], [1.0, 1.5]]],
@@ -26,13 +26,13 @@ const cases = [
 ];
 
 export default function() {
-  let dx = 1,
+  var dx = 1,
       dy = 1,
       threshold = thresholdSturges,
       smooth = smoothLinear;
 
   function contours(values) {
-    let tz = threshold(values);
+    var tz = threshold(values);
 
     // Convert number of thresholds into uniform thresholds.
     if (!Array.isArray(tz)) {
@@ -51,7 +51,7 @@ export default function() {
     const v = value === null ? NaN : +value;
     if (isNaN(v)) throw new Error(`invalid value: ${value}`);
 
-    const polygons = [],
+    var polygons = [],
         holes = [];
 
     isorings(values, v, function(ring) {
@@ -61,7 +61,7 @@ export default function() {
     });
 
     holes.forEach(function(hole) {
-      for (let i = 0, n = polygons.length, polygon; i < n; ++i) {
+      for (var i = 0, n = polygons.length, polygon; i < n; ++i) {
         if (contains((polygon = polygons[i])[0], hole) !== -1) {
           polygon.push(hole);
           return;
@@ -79,9 +79,9 @@ export default function() {
   // Marching squares with isolines stitched into rings.
   // Based on https://github.com/topojson/topojson-client/blob/v3.0.0/src/stitch.js
   function isorings(values, value, callback) {
-    const fragmentByStart = new Array,
-        fragmentByEnd = new Array;
-    let x, y, t0, t1, t2, t3;
+    var fragmentByStart = new Array,
+        fragmentByEnd = new Array,
+        x, y, t0, t1, t2, t3;
 
     function above(index) {
       const x = values[index];
@@ -123,11 +123,11 @@ export default function() {
     cases[t2 << 3].forEach(stitch);
 
     function stitch(line) {
-      const start = [line[0][0] + x, line[0][1] + y],
+      var start = [line[0][0] + x, line[0][1] + y],
           end = [line[1][0] + x, line[1][1] + y],
           startIndex = index(start),
-          endIndex = index(end);
-      let f, g;
+          endIndex = index(end),
+          f, g;
       if (f = fragmentByEnd[startIndex]) {
         if (g = fragmentByStart[endIndex]) {
           delete fragmentByEnd[f.end];
@@ -170,7 +170,7 @@ export default function() {
 
   function smoothLinear(ring, values, value) {
     ring.forEach(function(point) {
-      const x = point[0],
+      var x = point[0],
           y = point[1],
           xt = x | 0,
           yt = y | 0,
@@ -186,21 +186,11 @@ export default function() {
     });
   }
 
-  function valid(v) {
-    return v === null || isNaN(v = +v) ? -Infinity : v;
-  }
-
-  function gap(v0, v1, value) {
-    const a = value - v0;
-    const b = v1 - v0;
-    return isFinite(a) || isFinite(b) ? a / b : Math.sign(a) / Math.sign(b);
-  }
-
   contours.contour = contour;
 
   contours.size = function(_) {
     if (!arguments.length) return [dx, dy];
-    const _0 = Math.floor(_[0]), _1 = Math.floor(_[1]);
+    var _0 = Math.floor(_[0]), _1 = Math.floor(_[1]);
     if (!(_0 >= 0 && _1 >= 0)) throw new Error("invalid size");
     return dx = _0, dy = _1, contours;
   };
@@ -214,4 +204,14 @@ export default function() {
   };
 
   return contours;
+}
+
+function valid(v) {
+  return v === null || isNaN(v = +v) ? -Infinity : v;
+}
+
+function gap(v0, v1, value) {
+  const a = value - v0;
+  const b = v1 - v0;
+  return isFinite(a) || isFinite(b) ? a / b : Math.sign(a) / Math.sign(b);
 }
