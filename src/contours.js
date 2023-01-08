@@ -36,7 +36,7 @@ export default function() {
 
     // Convert number of thresholds into uniform thresholds.
     if (!Array.isArray(tz)) {
-      const e = extent(values, d => isFinite(d) ? d : null), ts = tickStep(e[0], e[1], tz);
+      const e = extent(values, finite), ts = tickStep(e[0], e[1], tz);
       tz = ticks(Math.floor(e[0] / ts) * ts, Math.floor(e[1] / ts - 1) * ts, tz);
     } else {
       tz = tz.slice().sort(ascending);
@@ -171,12 +171,10 @@ export default function() {
           yt = y | 0,
           v1 = valid(values[yt * dx + xt]);
       if (x > 0 && x < dx && xt === x) {
-        const d = gap(valid(values[yt * dx + xt - 1]), v1, value);
-        point[0] = isNaN(d) ? x : x + d - 0.5;
+        point[0] = smooth1(x, valid(values[yt * dx + xt - 1]), v1, value);
       }
       if (y > 0 && y < dy && yt === y) {
-        const d = gap(valid(values[(yt - 1) * dx + xt]), v1, value);
-        point[1] = isNaN(d) ? y : y + d - 0.5;
+        point[1] = smooth1(y, valid(values[(yt - 1) * dx + xt]), v1, value);
       }
     });
   }
@@ -201,16 +199,24 @@ export default function() {
   return contours;
 }
 
+// When computing the extent, ignore infinite values (as well as invalid ones).
+function finite(x) {
+  return isFinite(x) ? x : NaN;
+}
+
+// Is the (possibly invalid) x greater than or equal to the (known valid) value?
 function above(x, value) {
   return x == null ? false : +x >= value;
 }
 
+// During smoothing, treat any invalid value as negative infinity.
 function valid(v) {
   return v == null || isNaN(v = +v) ? -Infinity : v;
 }
 
-function gap(v0, v1, value) {
+function smooth1(x, v0, v1, value) {
   const a = value - v0;
   const b = v1 - v0;
-  return isFinite(a) || isFinite(b) ? a / b : Math.sign(a) / Math.sign(b);
+  const d = isFinite(a) || isFinite(b) ? a / b : Math.sign(a) / Math.sign(b);
+  return isNaN(d) ? x : x + d - 0.5;
 }
