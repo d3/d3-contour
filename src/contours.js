@@ -83,17 +83,12 @@ export default function() {
         fragmentByEnd = new Array,
         x, y, t0, t1, t2, t3;
 
-    function above(index) {
-      const x = values[index];
-      return x == null ? false : +x >= value;
-    }
-
     // Special case for the first row (y = -1, t2 = t3 = 0).
     x = y = -1;
-    t1 = above(0);
+    t1 = above(values[0], value);
     cases[t1 << 1].forEach(stitch);
     while (++x < dx - 1) {
-      t0 = t1, t1 = above(x + 1);
+      t0 = t1, t1 = above(values[x + 1], value);
       cases[t0 | t1 << 1].forEach(stitch);
     }
     cases[t1 << 0].forEach(stitch);
@@ -101,12 +96,12 @@ export default function() {
     // General case for the intermediate rows.
     while (++y < dy - 1) {
       x = -1;
-      t1 = above(y * dx + dx);
-      t2 = above(y * dx);
+      t1 = above(values[y * dx + dx], value);
+      t2 = above(values[y * dx], value);
       cases[t1 << 1 | t2 << 2].forEach(stitch);
       while (++x < dx - 1) {
-        t0 = t1, t1 = above(y * dx + dx + x + 1);
-        t3 = t2, t2 = above(y * dx + x + 1);
+        t0 = t1, t1 = above(values[y * dx + dx + x + 1], value);
+        t3 = t2, t2 = above(values[y * dx + x + 1], value);
         cases[t0 | t1 << 1 | t2 << 2 | t3 << 3].forEach(stitch);
       }
       cases[t1 | t2 << 3].forEach(stitch);
@@ -117,7 +112,7 @@ export default function() {
     t2 = values[y * dx] >= value;
     cases[t2 << 2].forEach(stitch);
     while (++x < dx - 1) {
-      t3 = t2, t2 = above(y * dx + x + 1);
+      t3 = t2, t2 = above(values[y * dx + x + 1], value);
       cases[t2 << 2 | t3 << 3].forEach(stitch);
     }
     cases[t2 << 3].forEach(stitch);
@@ -204,6 +199,10 @@ export default function() {
   };
 
   return contours;
+}
+
+function above(x, value) {
+  return x == null ? false : +x >= value;
 }
 
 function valid(v) {
