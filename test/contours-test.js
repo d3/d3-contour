@@ -288,3 +288,13 @@ it("contour(values, invalid value) throws an error", () => {
     assert.throws(() => contours().size([3, 3]).contour([1, 2, 3, 4, 5, 6, 7, 8, 9], value),  /invalid value/);
   }
 });
+
+it("contours(values) uses the expected nice thresholds", () => {
+  assert.deepStrictEqual(contours().size([2, 1]).thresholds(14)([-149.76192742819748, 321.19300631539585]).map((c) => c.value), [-150, -100, -50, 0, 50, 100, 150, 200, 250, 300]);
+  assert.deepStrictEqual(contours().size([2, 1]).thresholds(5)([-149.76192742819748, 321.19300631539585]).map((c) => c.value), [-200, -100, 0, 100, 200, 300]);
+  assert.deepStrictEqual(contours().size([2, 1]).thresholds(14)([149.76192742819748, -321.19300631539585]).map((c) => c.value), [-350, -300, -250, -200, -150, -100, -50, 0, 50, 100]);
+  assert.deepStrictEqual(contours().size([2, 1]).thresholds(5)([149.76192742819748, -321.19300631539585]).map((c) => c.value), [-400, -300, -200, -100, 0, 100]);
+  assert.deepStrictEqual(contours().size([2, 1]).thresholds(12)([-29, 50]).map((c) => c.value), [-30, -25, -20, -15, -10, -5, 0, 5, 10, 15, 20, 25, 30, 35, 40, 45]);
+  assert.deepStrictEqual(contours().size([2, 1]).thresholds(10)([-41, 245]).map((c) => c.value), [-50, 0, 50, 100, 150, 200]);
+  assert.deepStrictEqual(contours().size([2, 1]).thresholds(9)([-22, 242]).map((c) => c.value), [-50, 0, 50, 100, 150, 200]);
+});

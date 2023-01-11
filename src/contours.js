@@ -1,4 +1,4 @@
-import {extent, thresholdSturges, ticks, tickStep} from "d3-array";
+import {extent, nice, thresholdSturges, ticks} from "d3-array";
 import {slice} from "./array.js";
 import ascending from "./ascending.js";
 import area from "./area.js";
@@ -36,8 +36,10 @@ export default function() {
 
     // Convert number of thresholds into uniform thresholds.
     if (!Array.isArray(tz)) {
-      const e = extent(values, finite), ts = tickStep(e[0], e[1], tz);
-      tz = ticks(Math.floor(e[0] / ts) * ts, Math.floor(e[1] / ts - 1) * ts, tz);
+      const e = extent(values, finite);
+      tz = ticks(...nice(e[0], e[1], tz), tz);
+      while (tz[tz.length - 1] >= e[1]) tz.pop();
+      while (tz[1] < e[0]) tz.shift();
     } else {
       tz = tz.slice().sort(ascending);
     }
