@@ -87,6 +87,35 @@ it("contourDensity(data) returns nice default thresholds", async () => {
   assert.deepStrictEqual(contour.map(c => c.value), ticks(0.0002, 0.0059, 30));
 });
 
+it("contourDensity(data) supports a MEAN aggregation strategy", async () => {
+  const faithful = await tsv("data/faithful.tsv", autoType);
+
+  const width = 960,
+        height = 500,
+        marginTop = 20,
+        marginRight = 30,
+        marginBottom = 30,
+        marginLeft = 40;
+
+  const x = scaleLinear()
+      .domain(extent(faithful, d => d.waiting)).nice()
+      .rangeRound([marginLeft, width - marginRight]);
+
+  const y = scaleLinear()
+      .domain(extent(faithful, d => d.eruptions)).nice()
+      .rangeRound([height - marginBottom, marginTop]);
+
+  const contour = contourDensity()
+      .x(d => x(d.waiting))
+      .y(d => y(d.eruptions))
+      .size([width, height])
+      .bandwidth(30)
+      .aggregation('MEAN')
+    (faithful);
+
+  assert.deepStrictEqual(contour.map(c => c.value), ticks(0.0002, 0.0044, 22));
+});
+
 it("contourDensity.contours(data) preserves the specified threshold exactly", async () => {
   const faithful = await tsv("data/faithful.tsv", autoType);
 

@@ -26,10 +26,12 @@ export default function() {
       o = r * 3, // grid offset, to pad for blur
       n = (dx + o * 2) >> k, // grid width
       m = (dy + o * 2) >> k, // grid height
-      threshold = constant(20);
+      threshold = constant(20),
+      aggregation = 'SUM';
 
   function grid(data) {
     var values = new Float32Array(n * m),
+        valueCounts = new Uint32Array(n * m),
         pow2k = Math.pow(2, -k),
         i = -1;
 
@@ -46,6 +48,21 @@ export default function() {
         values[x0 + 1 + y0 * n] += xt * (1 - yt) * wi;
         values[x0 + 1 + (y0 + 1) * n] += xt * yt * wi;
         values[x0 + (y0 + 1) * n] += (1 - xt) * yt * wi;
+
+        if(aggregation === 'MEAN') {
+          valueCounts[x0 + y0 * n] += 1;
+          valueCounts[x0 + 1 + y0 * n] += 1;
+          valueCounts[x0 + 1 + (y0 + 1) * n] += 1;
+          valueCounts[x0 + (y0 + 1) * n] += 1;
+        }
+      }
+    }
+
+    if(aggregation === 'MEAN') {
+      for (i = 0; i < n * m; i++) {
+        if (valueCounts[i]) {
+          values[i] /= valueCounts[i];
+        }
       }
     }
 
@@ -137,6 +154,12 @@ export default function() {
 
   density.thresholds = function(_) {
     return arguments.length ? (threshold = typeof _ === "function" ? _ : Array.isArray(_) ? constant(slice.call(_)) : constant(_), density) : threshold;
+  };
+
+  density.aggregation = function(_) {
+    if(!arguments.length) return aggregation;
+    if(_ !== 'SUM' && _ !== 'MEAN') throw new Error("invalid aggregation");
+    return (aggregation = _, density);
   };
 
   density.bandwidth = function(_) {
