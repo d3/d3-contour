@@ -50,10 +50,10 @@ export default function() {
         values[x0 + (y0 + 1) * n] += (1 - xt) * yt * wi;
 
         if(aggregation === 'MEAN') {
-          valueCounts[x0 + y0 * n] += 1;
-          valueCounts[x0 + 1 + y0 * n] += 1;
-          valueCounts[x0 + 1 + (y0 + 1) * n] += 1;
-          valueCounts[x0 + (y0 + 1) * n] += 1;
+          valueCounts[x0 + y0 * n] += (1 - xt) * (1 - yt);
+          valueCounts[x0 + 1 + y0 * n] += xt * (1 - yt);
+          valueCounts[x0 + 1 + (y0 + 1) * n] += xt * yt;
+          valueCounts[x0 + (y0 + 1) * n] += (1 - xt) * yt;
         }
       }
     }
