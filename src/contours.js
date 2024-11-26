@@ -59,11 +59,12 @@ export default function() {
     const v = value == null ? NaN : +value;
     if (isNaN(v)) throw new Error(`invalid value: ${value}`);
 
-    // Don’t round the corners by clamping values on the edge.
-    const bottom = values.slice(0, dx);
-    const top = values.slice(-dx);
-    const left = Array.from({length: dy}, (_, i) => values[i * dx]);
-    const right = Array.from({length: dy}, (_, i) => values[i * dx + dx - 1]);
+    // Don’t round the corners by clamping values on the edge. Note: to blur, we
+    // need to ensure that the values are valid numbers.
+    const bottom = Array.from(values.slice(0, dx), valid);
+    const top = Array.from(values.slice(-dx), valid);
+    const left = Array.from({length: dy}, (_, i) => valid(values[i * dx]));
+    const right = Array.from({length: dy}, (_, i) => valid(values[i * dx + dx - 1]));
     blur(bottom, blurEdges);
     blur(top, blurEdges);
     blur(left, blurEdges);

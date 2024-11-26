@@ -82,14 +82,12 @@ export async function faithfulContour() {
   </svg>`;
 }
 
-export async function volcanoContours() {
-  const data = await json("data/volcano.json");
+function svgContours(data, {width = 500, smooth = true} = {}) {
   const n = data.width;
   const m = data.height;
-  const width = 928;
   const height = Math.round(m / n * width);
   const path = geoPath().projection(geoIdentity().scale(width / n));
-  const color = scaleSequential(interpolateTurbo).domain(extent(data.values)).nice();
+  const color = scaleSequential(interpolateTurbo).domain(extent(data.values, d => isFinite(d) ? d : NaN)).nice();
   const svg = create("svg")
       .attr("width", width)
       .attr("height", height)
@@ -100,30 +98,55 @@ export async function volcanoContours() {
     .selectAll()
     .data(color.ticks(20))
     .join("path")
-      .attr("d", d => path(contours().size([n, m]).contour(data.values, d)))
+      .attr("d", d => path(contours().smooth(smooth).size([n, m]).contour(data.values, d)))
       .attr("fill", color);
   return svg.node();
 }
 
+export async function volcanoContours() {
+  return svgContours(await json("data/volcano.json"), {width: 928});
+}
+
 export async function volcanoContoursRugged() {
-  const data = await json("data/volcano.json");
-  const n = data.width;
-  const m = data.height;
-  const width = 928;
-  const height = Math.round(m / n * width);
-  const path = geoPath().projection(geoIdentity().scale(width / n));
-  const color = scaleSequential(interpolateTurbo).domain(extent(data.values)).nice();
-  const svg = create("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .attr("viewBox", [0, 0, width, height])
-      .attr("style", "max-width: 100%; height: auto;");
-  svg.append("g")
-      .attr("stroke", "black")
-    .selectAll()
-    .data(color.ticks(20))
-    .join("path")
-      .attr("d", d => path(contours().smooth(false).size([n, m]).contour(data.values, d)))
-      .attr("fill", color);
-  return svg.node();
+  return svgContours(await json("data/volcano.json"), {width: 928, smooth: false});
+}
+
+export function matrixContours1() {
+  const n = 16;
+  const data = {values: new Uint32Array(n * n), width: n, height: n};
+  for (let i = 0; i < n; ++i)
+    for (let j = 0; j < n; ++j)
+      data.values[i + n * j] = i * j;
+  return svgContours(data);
+}
+
+export function matrixContours2() {
+  const n = 16;
+  const data = {values: new Float32Array(n * n), width: n, height: n};
+  for (let i = 0; i < n; ++i)
+    for (let j = 0; j < n; ++j)
+      data.values[i + n * j] = i + j;
+  return svgContours(data);
+}
+
+export function matrixContours3() {
+  const n = 200;
+  const data = {values: new Float32Array(n * n), width: n, height: n};
+  for (let i = 0; i < n; ++i)
+    for (let j = 0; j < n; ++j)
+      data.values[i + n * j] = Math.sin(2 * i / n + 2 * (j / n)**2);
+  return svgContours(data);
+}
+
+
+export function matrixContours4Holes() {
+  const n = 200;
+  const data = {values: new Float32Array(n * n), width: n, height: n};
+  for (let i = 0; i < n; ++i)
+    for (let j = 0; j < n; ++j)
+      data.values[i + n * j] = Math.cos(2 * i / n + 2 * (j / n)**2);
+  data.values[1256] = NaN;
+  data.values[6900] = -Infinity;
+  data.values[18700] = +Infinity;
+  return svgContours(data);
 }
