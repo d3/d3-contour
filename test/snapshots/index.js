@@ -104,3 +104,26 @@ export async function volcanoContours() {
       .attr("fill", color);
   return svg.node();
 }
+
+export async function volcanoContoursRugged() {
+  const data = await json("data/volcano.json");
+  const n = data.width;
+  const m = data.height;
+  const width = 928;
+  const height = Math.round(m / n * width);
+  const path = geoPath().projection(geoIdentity().scale(width / n));
+  const color = scaleSequential(interpolateTurbo).domain(extent(data.values)).nice();
+  const svg = create("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("viewBox", [0, 0, width, height])
+      .attr("style", "max-width: 100%; height: auto;");
+  svg.append("g")
+      .attr("stroke", "black")
+    .selectAll()
+    .data(color.ticks(20))
+    .join("path")
+      .attr("d", d => path(contours().smooth(false).size([n, m]).contour(data.values, d)))
+      .attr("fill", color);
+  return svg.node();
+}
