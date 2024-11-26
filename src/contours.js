@@ -1,4 +1,4 @@
-import {extent, nice, thresholdSturges, ticks} from "d3-array";
+import {blur, extent, nice, thresholdSturges, ticks} from "d3-array";
 import {slice} from "./array.js";
 import ascending from "./ascending.js";
 import area from "./area.js";
@@ -6,7 +6,7 @@ import constant from "./constant.js";
 import contains from "./contains.js";
 import noop from "./noop.js";
 
-var cases = [
+const cases = [
   [],
   [[[1.0, 1.5], [0.5, 1.0]]],
   [[[1.5, 1.0], [1.0, 1.5]]],
@@ -25,14 +25,20 @@ var cases = [
   []
 ];
 
+const blurEdges = 0.5;
+
+function clamp(x, lo, hi) {
+  return x < lo ? lo : x > hi ? hi : x;
+}
+
 export default function() {
-  var dx = 1,
-      dy = 1,
-      threshold = thresholdSturges,
-      smooth = smoothLinear;
+  let dx = 1;
+  let dy = 1;
+  let threshold = thresholdSturges;
+  let smooth = smoothLinear;
 
   function contours(values) {
-    var tz = threshold(values);
+    let tz = threshold(values);
 
     // Convert number of thresholds into uniform thresholds.
     if (!Array.isArray(tz)) {
@@ -53,17 +59,46 @@ export default function() {
     const v = value == null ? NaN : +value;
     if (isNaN(v)) throw new Error(`invalid value: ${value}`);
 
-    var polygons = [],
-        holes = [];
+    // Don’t round the corners by clamping values on the edge. Note: to blur, we
+    // need to ensure that the values are valid numbers.
+    const bottom = Array.from(values.slice(0, dx), valid);
+    const top = Array.from(values.slice(-dx), valid);
+    const left = Array.from({length: dy}, (_, i) => valid(values[i * dx]));
+    const right = Array.from({length: dy}, (_, i) => valid(values[i * dx + dx - 1]));
+    blur(bottom, blurEdges);
+    blur(top, blurEdges);
+    blur(left, blurEdges);
+    blur(right, blurEdges);
 
-    isorings(values, v, function(ring) {
-      smooth(ring, values, v);
-      if (area(ring) > 0) polygons.push([ring]);
-      else holes.push(ring);
+    function get(x, y) {
+      const x0 = clamp(x, 0, dx - 1);
+      const y0 = clamp(y, 0, dy - 1);
+      if (y < 0) return bottom[x0];
+      if (y >= dy) return top[x0];
+      if (x < 0) return left[y0];
+      if (x >= dx) return right[y0];
+      return values[x0 + y0 * dx];
+    }
+
+    const polygons = [];
+    const holes = [];
+
+    isorings(get, value, function(ring) {
+      smooth(ring, get, value);
+      const r = [];
+      let x0, y0;
+      for (const point of ring) {
+        const x = clamp(point[0], 0, dx);
+        const y = clamp(point[1], 0, dy);
+        if (x !== x0 || y !== y0) r.push([(x0 = x), (y0 = y)]);
+      }
+      const a = area(r);
+      if (a > 0) polygons.push([r]);
+      else if (a < 0) holes.push(r);
     });
 
     holes.forEach(function(hole) {
-      for (var i = 0, n = polygons.length, polygon; i < n; ++i) {
+      for (let i = 0, n = polygons.length, polygon; i < n; ++i) {
         if (contains((polygon = polygons[i])[0], hole) !== -1) {
           polygon.push(hole);
           return;
@@ -80,51 +115,52 @@ export default function() {
 
   // Marching squares with isolines stitched into rings.
   // Based on https://github.com/topojson/topojson-client/blob/v3.0.0/src/stitch.js
-  function isorings(values, value, callback) {
-    var fragmentByStart = new Array,
-        fragmentByEnd = new Array,
-        x, y, t0, t1, t2, t3;
+  function isorings(get, value, callback) {
+    const test = (x, y) => above(get(x, y), value);
+    const fragmentByStart = new Array;
+    const fragmentByEnd = new Array;
+    let x, y, t0, t1, t2, t3;
 
     // Special case for the first row (y = -1, t2 = t3 = 0).
-    x = y = -1;
-    t1 = above(values[0], value);
+    x = y = -2;
+    t1 = test(-1, -1);
     cases[t1 << 1].forEach(stitch);
-    while (++x < dx - 1) {
-      t0 = t1, t1 = above(values[x + 1], value);
+    while (++x < dx) {
+      t0 = t1, t1 = test(x + 1, -1);
       cases[t0 | t1 << 1].forEach(stitch);
     }
     cases[t1 << 0].forEach(stitch);
 
     // General case for the intermediate rows.
-    while (++y < dy - 1) {
-      x = -1;
-      t1 = above(values[y * dx + dx], value);
-      t2 = above(values[y * dx], value);
+    while (++y < dy) {
+      x = -2;
+      t1 = test(x + 1, y + 1);
+      t2 = test(x + 1, y);
       cases[t1 << 1 | t2 << 2].forEach(stitch);
-      while (++x < dx - 1) {
-        t0 = t1, t1 = above(values[y * dx + dx + x + 1], value);
-        t3 = t2, t2 = above(values[y * dx + x + 1], value);
+      while (++x < dx) {
+        t0 = t1, t1 = test(x + 1, y + 1);
+        t3 = t2, t2 = test(x + 1, y);
         cases[t0 | t1 << 1 | t2 << 2 | t3 << 3].forEach(stitch);
       }
       cases[t1 | t2 << 3].forEach(stitch);
     }
 
     // Special case for the last row (y = dy - 1, t0 = t1 = 0).
-    x = -1;
-    t2 = values[y * dx] >= value;
+    x = -2;
+    t2 = test(x, y);
     cases[t2 << 2].forEach(stitch);
-    while (++x < dx - 1) {
-      t3 = t2, t2 = above(values[y * dx + x + 1], value);
+    while (++x < dx) {
+      t3 = t2, t2 = test(x + 1, y);
       cases[t2 << 2 | t3 << 3].forEach(stitch);
     }
     cases[t2 << 3].forEach(stitch);
 
     function stitch(line) {
-      var start = [line[0][0] + x, line[0][1] + y],
-          end = [line[1][0] + x, line[1][1] + y],
-          startIndex = index(start),
-          endIndex = index(end),
-          f, g;
+      const start = [line[0][0] + x, line[0][1] + y];
+      const end = [line[1][0] + x, line[1][1] + y];
+      const startIndex = index(start);
+      const endIndex = index(end);
+      let f, g;
       if (f = fragmentByEnd[startIndex]) {
         if (g = fragmentByStart[endIndex]) {
           delete fragmentByEnd[f.end];
@@ -165,19 +201,15 @@ export default function() {
     return point[0] * 2 + point[1] * (dx + 1) * 4;
   }
 
-  function smoothLinear(ring, values, value) {
+  function smoothLinear(ring, get, value) {
     ring.forEach(function(point) {
-      var x = point[0],
-          y = point[1],
-          xt = x | 0,
-          yt = y | 0,
-          v1 = valid(values[yt * dx + xt]);
-      if (x > 0 && x < dx && xt === x) {
-        point[0] = smooth1(x, valid(values[yt * dx + xt - 1]), v1, value);
-      }
-      if (y > 0 && y < dy && yt === y) {
-        point[1] = smooth1(y, valid(values[(yt - 1) * dx + xt]), v1, value);
-      }
+      const x = point[0];
+      const y = point[1];
+      const xt = x | 0;
+      const yt = y | 0;
+      const v1 = valid(get(xt, yt));
+      if (x > 0 && x < dx && xt === x) point[0] = smooth1(x, valid(get(xt - 1, yt)), v1, value);
+      if (y > 0 && y < dy && yt === y) point[1] = smooth1(y, valid(get(xt, yt - 1)), v1, value);
     });
   }
 
@@ -185,7 +217,8 @@ export default function() {
 
   contours.size = function(_) {
     if (!arguments.length) return [dx, dy];
-    var _0 = Math.floor(_[0]), _1 = Math.floor(_[1]);
+    const _0 = Math.floor(_[0]);
+    const _1 = Math.floor(_[1]);
     if (!(_0 >= 0 && _1 >= 0)) throw new Error("invalid size");
     return dx = _0, dy = _1, contours;
   };
