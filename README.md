@@ -7,6 +7,6 @@ This module computes contour polygons by applying [marching squares](https://en.
 ## Resources
 
 - [Documentation](https://d3js.org/d3-contour)
-- [Examples](https://observablehq.com/collection/@d3/d3-contour)
+- [Examples](https://observablehq.com/@d3/-/collection/d3-contour)
 - [Releases](https://github.com/d3/d3-contour/releases)
 - [Getting help](https://d3js.org/community)
