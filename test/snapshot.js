@@ -1,6 +1,6 @@
-import assert from "assert";
-import {promises as fs} from "fs";
-import * as path from "path";
+import assert from "node:assert";
+import {promises as fs} from "node:fs";
+import * as path from "node:path";
 import beautify from "js-beautify";
 import it from "./jsdom.js";
 import * as snapshots from "./snapshots/index.js";

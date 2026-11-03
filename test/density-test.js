@@ -1,10 +1,10 @@
-import assert from "assert";
+import assert from "node:assert";
 import {extent, ticks} from "d3-array";
 import {autoType} from "d3-dsv";
 import {tsv} from "d3-fetch";
 import {polygonCentroid} from "d3-polygon";
 import {scaleLinear} from "d3-scale";
-import {contourDensity} from "../src/index.js";
+import {contourDensity} from "d3-contour";
 import {assertInDelta} from "./asserts.js";
 import it from "./jsdom.js";
 
