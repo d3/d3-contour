@@ -31,14 +31,12 @@
     "umd": "./dist/d3-contour.min.js",
     "default": "./dist/d3-contour.mjs"
   },
-  "_moduleAliases": {
-    "d3-contour": "./src/index.js"
-  },
   "sideEffects": false,
   "dependencies": {
     "d3-array": "^3.2.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.5",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-terser": "^1.0.2",
     "d3-axis": "^3.0.0",
@@ -48,16 +46,17 @@
     "d3-polygon": "^3.0.1",
     "d3-scale": "^4.0.2",
     "d3-selection": "^3.0.0",
-    "eslint": "^8.57.1",
+    "eslint": "^9.39.5",
+    "globals": "^17.14.0",
     "htl": "^0.3.1",
     "js-beautify": "^1.15.4",
     "jsdom": "^21.1.2",
-    "mocha": "^10.8.2",
-    "module-alias": "^2.3.5",
-    "rollup": "^4.67.4"
+    "rollup": "^4.67.4",
+    "vitest": "^4.1.12"
   },
   "scripts": {
-    "test": "mkdir -p test/output && mocha -r module-alias/register 'test/**/*-test.js' test/snapshot.js && eslint src test",
+    "test": "vitest",
+    "lint": "eslint src test",
     "prepublishOnly": "rm -rf dist && rollup -c"
   },
   "engines": {
