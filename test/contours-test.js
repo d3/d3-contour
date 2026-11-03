@@ -1,6 +1,6 @@
 import assert from "node:assert";
 import {it} from "vitest";
-import {contours} from "../src/index.js";
+import {contours} from "d3-contour";
 
 it("contours(values) returns the expected result for an empty polygon", () => {
   const c = contours().size([10, 10]).thresholds([0.5]);
