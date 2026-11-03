@@ -1,4 +1,4 @@
-import assert from "assert";
+import assert from "node:assert";
 import {extent, ticks} from "d3-array";
 import {autoType} from "d3-dsv";
 import {tsv} from "d3-fetch";

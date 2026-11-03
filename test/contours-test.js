@@ -1,5 +1,5 @@
+import assert from "node:assert";
 import {it} from "vitest";
-import assert from "assert";
 import {contours} from "../src/index.js";
 
 it("contours(values) returns the expected result for an empty polygon", () => {
