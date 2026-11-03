@@ -10,7 +10,7 @@ importers:
     dependencies:
       d3-array:
         specifier: ^3.2.4
-        version: 3.2.4
+        version: 3.2.5
     devDependencies:
       '@eslint/js':
         specifier: ^10.0.1
@@ -598,8 +598,8 @@ packages:
     resolution: {integrity: sha512-N4u2ABATi3Qplzf0hWbVCdjenim8F3ojEXpBDF5hBpjzW182MjNGLqfmQ0SkSPeQ+V86ZXgeH8aXj6kayd4jgg==}
     engines: {node: '>=14'}
 
-  d3-array@3.2.4:
-    resolution: {integrity: sha512-tdQAmyA18i4J7wprpYq8ClcxZy3SC31QMeByyCFyRt7BVHdREQZ5lpzoe5mFEYZUWe+oq8HBvk9JjpibyEV4Jg==}
+  d3-array@3.2.5:
+    resolution: {integrity: sha512-Th8qGXoBalmWsstpkuhmBuTsBQIFqYOJtjlBvNVvBfJ8E3uYusBUwUR8HU20U0qKKQkgCvKyR1YjiozWadk5QA==}
     engines: {node: '>=12'}
 
   d3-axis@3.0.0:
@@ -1854,7 +1854,7 @@ snapshots:
     dependencies:
       rrweb-cssom: 0.6.0
 
-  d3-array@3.2.4:
+  d3-array@3.2.5:
     dependencies:
       internmap: 2.0.3
 
@@ -1876,7 +1876,7 @@ snapshots:
 
   d3-geo@3.1.1:
     dependencies:
-      d3-array: 3.2.4
+      d3-array: 3.2.5
 
   d3-interpolate@3.0.1:
     dependencies:
@@ -1886,7 +1886,7 @@ snapshots:
 
   d3-scale@4.0.2:
     dependencies:
-      d3-array: 3.2.4
+      d3-array: 3.2.5
       d3-format: 3.1.2
       d3-interpolate: 3.0.1
       d3-time: 3.1.0
@@ -1900,7 +1900,7 @@ snapshots:
 
   d3-time@3.1.0:
     dependencies:
-      d3-array: 3.2.4
+      d3-array: 3.2.5
 
   data-urls@4.0.0:
     dependencies:
