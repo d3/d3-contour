@@ -9,7 +9,7 @@ importers:
   .:
     dependencies:
       d3-array:
-        specifier: ^3.2.0
+        specifier: ^3.2.4
         version: 3.2.4
     devDependencies:
       '@eslint/js':
@@ -28,14 +28,14 @@ importers:
         specifier: ^3.0.1
         version: 3.0.1
       d3-fetch:
-        specifier: ^3.0.1
-        version: 3.0.1
+        specifier: ^3.0.2
+        version: 3.0.2
       d3-geo:
         specifier: ^3.1.1
         version: 3.1.1
       d3-polygon:
-        specifier: ^3.0.1
-        version: 3.0.1
+        specifier: ^3.0.2
+        version: 3.0.2
       d3-scale:
         specifier: ^4.0.2
         version: 4.0.2
@@ -49,8 +49,8 @@ importers:
         specifier: ^17.14.0
         version: 17.14.0
       htl:
-        specifier: ^0.3.1
-        version: 0.3.1
+        specifier: ^1.0.0
+        version: 1.0.0
       js-beautify:
         specifier: ^1.15.4
         version: 1.15.4
@@ -606,8 +606,8 @@ packages:
     resolution: {integrity: sha512-IH5tgjV4jE/GhHkRV0HiVYPDtvfjHQlQfJHs0usq7M30XcSBvOotpmH1IgkcXsO/5gEQZD43B//fc7SRT5S+xw==}
     engines: {node: '>=12'}
 
-  d3-color@3.1.0:
-    resolution: {integrity: sha512-zg/chbXyeBtMQ1LbD/WSoW2DpC3I0mpmPdW+ynRTj/x2DAWYrIY7qeZIHidozwV24m4iavr15lNwIwLxRmOxhA==}
+  d3-color@3.1.1:
+    resolution: {integrity: sha512-lfab8x0Bj0UO7SNsY8dZSbNIA6ipbkE3X0NG9nqjCu6CfCHZseuDnOSJY7hidKrjpP++i1M2qT+FlAdPKYRilA==}
     engines: {node: '>=12'}
 
   d3-dsv@3.0.1:
@@ -615,8 +615,8 @@ packages:
     engines: {node: '>=12'}
     hasBin: true
 
-  d3-fetch@3.0.1:
-    resolution: {integrity: sha512-kpkQIM20n3oLVBKGg6oHrUchHM3xODkTzjMoj7aWQFq5QEM+R6E4WkzT5+tojDY7yjez8KgCBRoj4aEr99Fdqw==}
+  d3-fetch@3.0.2:
+    resolution: {integrity: sha512-1wGF62bgjMRbF6mqbD+6rRWBL2hwWVYQjFO2UP3Wm1nIAvJZKaQxXM5caVY7athoCa8wIq9lCf7g44lPWFk50g==}
     engines: {node: '>=12'}
 
   d3-format@3.1.2:
@@ -631,8 +631,8 @@ packages:
     resolution: {integrity: sha512-3bYs1rOD33uo8aqJfKP3JWPAibgw8Zm2+L9vBKEHJ2Rg+viTR7o5Mmv5mZcieN+FRYaAOWX5SJATX6k1PWz72g==}
     engines: {node: '>=12'}
 
-  d3-polygon@3.0.1:
-    resolution: {integrity: sha512-3vbA7vXYwfe1SYhED++fPUQlWSYTTGmFmQiany/gdbiWgU/iEyQzyymwL9SkJjFFuCS4902BSzewVGsHHmHtXg==}
+  d3-polygon@3.0.2:
+    resolution: {integrity: sha512-WAUvPudGU1Dn4mDPfb6+JnnbeVEV53hG/BoT+bxts6AkZsOpTEiV1jHYX+2vtwCICNFG9Wxv8QS+eW1zE/Dwfg==}
     engines: {node: '>=12'}
 
   d3-scale@4.0.2:
@@ -888,8 +888,8 @@ packages:
   hookified@2.2.0:
     resolution: {integrity: sha512-p/LgFzRN5FeoD3DLS6bkUapeye6E4SI6yJs6KetENd18S+FBthqYq2amJUWpt5z0EQwwHemidjY5OqJGEKm5uA==}
 
-  htl@0.3.1:
-    resolution: {integrity: sha512-1LBtd+XhSc+++jpOOt0lCcEycXs/zTQSupOISnVAUmvGBpV7DH+C2M6hwV7zWYfpTMMg9ch4NO0lHiOTAMHdVA==}
+  htl@1.0.0:
+    resolution: {integrity: sha512-dbNhlENVOgGIXNP7iYKS+p3uH7mc6CZJIubDiKpOn0eKYHdOzoZgkXI9Z4AH3gLZzFwz9/6xgPsc2fff7zXxUg==}
     engines: {node: '>=12'}
 
   html-encoding-sniffer@3.0.0:
@@ -1860,7 +1860,7 @@ snapshots:
 
   d3-axis@3.0.0: {}
 
-  d3-color@3.1.0: {}
+  d3-color@3.1.1: {}
 
   d3-dsv@3.0.1:
     dependencies:
@@ -1868,7 +1868,7 @@ snapshots:
       iconv-lite: 0.6.3
       rw: 1.3.3
 
-  d3-fetch@3.0.1:
+  d3-fetch@3.0.2:
     dependencies:
       d3-dsv: 3.0.1
 
@@ -1880,9 +1880,9 @@ snapshots:
 
   d3-interpolate@3.0.1:
     dependencies:
-      d3-color: 3.1.0
+      d3-color: 3.1.1
 
-  d3-polygon@3.0.1: {}
+  d3-polygon@3.0.2: {}
 
   d3-scale@4.0.2:
     dependencies:
@@ -2146,7 +2146,7 @@ snapshots:
 
   hookified@2.2.0: {}
 
-  htl@0.3.1: {}
+  htl@1.0.0: {}
 
   html-encoding-sniffer@3.0.0:
     dependencies:

@@ -33,7 +33,7 @@
   },
   "sideEffects": false,
   "dependencies": {
-    "d3-array": "^3.2.0"
+    "d3-array": "^3.2.4"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -41,14 +41,14 @@
     "@rollup/plugin-terser": "^1.0.2",
     "d3-axis": "^3.0.0",
     "d3-dsv": "^3.0.1",
-    "d3-fetch": "^3.0.1",
+    "d3-fetch": "^3.0.2",
     "d3-geo": "^3.1.1",
-    "d3-polygon": "^3.0.1",
+    "d3-polygon": "^3.0.2",
     "d3-scale": "^4.0.2",
     "d3-selection": "^3.0.0",
     "eslint": "^10.14.0",
     "globals": "^17.14.0",
-    "htl": "^0.3.1",
+    "htl": "^1.0.0",
     "js-beautify": "^1.15.4",
     "jsdom": "^21.1.2",
     "rollup": "^4.67.4",
